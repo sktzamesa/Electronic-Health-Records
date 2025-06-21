@@ -71,5 +71,31 @@
             </div>
         </div>
     </section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const birthdayInput = document.getElementById('register-birthday');
+    const ageInput = document.getElementById('register-age');
+
+    // Prevent future birthdays
+    const today = new Date().toISOString().split("T")[0];
+    birthdayInput.max = today;
+
+    birthdayInput.addEventListener('change', function () {
+        const birthDate = new Date(birthdayInput.value);
+        const now = new Date();
+
+        if (!isNaN(birthDate)) {
+            let age = now.getFullYear() - birthDate.getFullYear();
+            const m = now.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && now.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            ageInput.value = age >= 0 ? age : '';
+        }
+    });
+});
+</script>
+
+
 </body>
 </html>

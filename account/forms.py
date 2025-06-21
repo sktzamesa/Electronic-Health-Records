@@ -11,25 +11,35 @@ from django.contrib.auth.models import User
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['doctor', 'appointment_date', 'service', 'sub_service']
+        fields = ['doctor', 'appointment_date', 'appointment_time', 'service', 'sub_service']
         widgets = {
             'doctor': forms.Select(attrs={'class': 'form-control'}),
-            'appointment_date': forms.DateTimeInput(
-                attrs={
-                    'class': 'form-control',
-                    'type': 'datetime-local',
-                    'step': 3600,  # Only allow hour intervals
-                }
-            ),
             'service': forms.Select(attrs={'class': 'form-control'}),
             'sub_service': forms.Select(attrs={'class': 'form-control'}),
-        }
+            'appointment_date': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control',
+                    'id': 'appointment-date'
+                }
+            ),
+            'appointment_time': forms.TextInput(attrs={
+                    'class': 'form-control',
+                    'id': 'appointment-time',
+                    }),
 
-    def clean_appointment_date(self):
-        appointment_date = self.cleaned_data.get('appointment_date')
-        if appointment_date and appointment_date.minute != 0:
+        }
+#dito need dapat ma-align ung date and time sa flatpickr
+#base sa kung ano ung nasa javascript na flatpickr
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['appointment_time'].input_formats = ['%I:%M %p']  # Matches Flatpickr's "h:i K" format
+
+    def clean_appointment_time(self):
+        appointment_time = self.cleaned_data.get('appointment_time')
+        if appointment_time and appointment_time.minute != 0:
             raise ValidationError("Appointment time must be on the hour (e.g., 10:00, 11:00).")
-        return appointment_date
+        return appointment_time
 class RegisterForm(forms.Form):
 
     name = forms.CharField(

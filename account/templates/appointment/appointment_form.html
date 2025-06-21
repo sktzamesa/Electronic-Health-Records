@@ -24,160 +24,23 @@
         <main class="dashboard-main appointment-main">
             <section class="appointment-form-container">
                 <h2>Book an Appointment</h2>
-                <form method="post">
-                    {% csrf_token %}
+                <form method="post" class="appointment-form">
+    {% csrf_token %}
 
+    {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="required">*</span>{% endif %}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger">{{ field.errors.0 }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
 
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.non_field_errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+    <button type="submit" class="book-appointment-btn">Book Appointment</button>
+</form>
 
-                    <label for="{{ form.Service.id_for_label }}">Type of Service <span class="required">*</span></label>
-                    {{ form.service }}
-                    {% if form.service.errors %}
-                        <div class="text-danger">{{ form.service.errors }}</div>
-                    {% endif %}
-
-                    <label for="{{ form.sub_service.id_for_label }}">Sub-Service <span class="required">*</span></label>
-                    {{ form.sub_service }}
-                    {% if form.sub_service.errors %}
-                        <div class="text-danger">{{ form.sub_service.errors }}</div>
-                    {% endif %}
-
-                    <label for="{{ form.doctor_name_display.id_for_label }}">Doctor <span class="required">*</span></label>
-                    {{ form.doctor_name_display }} {# This is the readonly text input #}
-                    {{ form.doctor }}
-                    {% if form.doctor.errors %}
-                        <div class="text-danger">{{ form.doctor.errors }}</div>
-                    {% endif %}
-                    <span id="doctorLockedMsg" style="display:none; color:#10b981; font-size:0.98em; margin-top:4px;">
-                        You chose this doctor from the availability list.
-                    </span>
-
-
-                    <div class="appointment-date-group">
-    <label for="{{ form.appointment_date.id_for_label }}">Date and Time <span class="required">*</span></label>
-    {{ form.appointment_date }}
-    <small style="color:#059669;">* Only full hours can be selected (e.g., 10:00, 11:00)</small>
-    {% if form.appointment_date.errors %}
-        <div class="appointment-date-error">{{ form.appointment_date.errors }}</div>
-    {% endif %}
-</div>
-
-                    <button type="submit" class ="book-appointment-btn">Book Appointment</button>
-                </form>
             </section>
         </main>
     </div>
-{% endblock %}
-
-{% block extra_js %}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const serviceTypeSelect = document.getElementById('serviceType');
-        const subServiceTypeSelect = document.getElementById('subServiceType');
-        const doctorNameDisplayInput = document.getElementById('doctorNameDisplay');
-        const doctorHiddenSelect = document.getElementById('doctorSelect'); // The actual select for doctor ID
-        const doctorLockedMsg = document.getElementById('doctorLockedMsg');
-        const appointmentForm = document.getElementById('appointmentForm');
-        const appointmentDateTimeInput = document.getElementById('appointmentDateTime');
-
-        // Initial state for sub-service
-        subServiceTypeSelect.disabled = true;
-
-        // Function to fetch and populate sub-services
-        function populateSubServices(serviceId) {
-            subServiceTypeSelect.innerHTML = '<option value="">Loading sub-services...</option>';
-            subServiceTypeSelect.disabled = true;
-
-            if (serviceId) {
-                fetch(`/get-sub-services/?service_id=${serviceId}`) // Ensure this URL matches your urls.py
-                    .then(response => response.json())
-                    .then(data => {
-                        subServiceTypeSelect.innerHTML = '<option value="">Select a sub-service</option>';
-                        data.forEach(subService => {
-                            const option = document.createElement('option');
-                            option.value = subService.id;
-                            option.textContent = subService.SubService; // Check model field name case
-                            subServiceTypeSelect.appendChild(option);
-                        });
-                        subServiceTypeSelect.disabled = false;
-                        subServiceTypeSelect.required = true;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching sub-services:', error);
-                        subServiceTypeSelect.innerHTML = '<option value="">Error loading sub-services</option>';
-                    });
-            } else {
-                subServiceTypeSelect.innerHTML = '<option value="">Select a sub-service</option>';
-                subServiceTypeSelect.disabled = true;
-                subServiceTypeSelect.required = false;
-            }
-        }
-
-        // Event listener for service type change
-        serviceTypeSelect.addEventListener('change', function() {
-            populateSubServices(this.value);
-        });
-
-        // --- Doctor Selection Logic ---
-        // This part needs to be dynamically populated, likely from the calendar widget.
-        // For demonstration, let's assume a doctor ID and name might be passed via URL parameters
-        // or set by an external calendar interaction.
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const preselectedDoctorId = urlParams.get('doctor_id');
-        const preselectedDoctorName = urlParams.get('doctor_name');
-
-        if (preselectedDoctorId && preselectedDoctorName) {
-            doctorNameDisplayInput.value = preselectedDoctorName;
-            doctorHiddenSelect.value = preselectedDoctorId; // Set the hidden select's value
-            doctorNameDisplayInput.setAttribute('readonly', true);
-            doctorLockedMsg.style.display = 'inline';
-            // Also, set the actual select element if it's not hidden (though you set it hidden in form)
-            // If the doctor field in the form is a Select widget and not hidden,
-            // you'd set its selected option like this:
-            // if (doctorHiddenSelect) {
-            //     doctorHiddenSelect.value = preselectedDoctorId;
-            // }
-        } else {
-            doctorNameDisplayInput.value = "Select from calendar";
-            doctorHiddenSelect.value = ""; // Ensure the hidden actual select is empty
-            doctorLockedMsg.style.display = 'none';
-        }
-
-        // --- Calendar Widget Placeholder ---
-        // You'll need to integrate a calendar library (e.g., FullCalendar.js) here.
-        // The calendar should:
-        // 1. Allow users to select a date.
-        // 2. Potentially make an AJAX call to get available doctors/slots for that date.
-        // 3. When a doctor/slot is selected in the calendar, update:
-        //    - `doctorNameDisplayInput.value` with the doctor's name
-        //    - `doctorHiddenSelect.value` with the doctor's ID (the actual value sent to Django)
-        //    - `appointmentDateTimeInput.value` with the selected date and time
-        const calendarWidget = document.getElementById('calendar-widget');
-        if (calendarWidget) {
-            calendarWidget.innerHTML = "<p>Your interactive calendar will go here. It should populate doctor and date/time fields.</p>";
-            // Example of how you might set values from a calendar click:
-            // Assuming you have a function that gets called when a slot is picked:
-            // function onSlotSelected(doctorId, doctorName, dateTime) {
-            //     doctorNameDisplayInput.value = doctorName;
-            //     doctorHiddenSelect.value = doctorId;
-            //     appointmentDateTimeInput.value = dateTime; // e.g., '2025-06-12T14:30'
-            //     doctorLockedMsg.style.display = 'inline';
-            // }
-        }
-    });
-</script>
-
-<!-- Flatpickr CSS & JS (add in your <head> if not already present) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-</script>
 {% endblock %}

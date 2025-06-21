@@ -13,16 +13,16 @@ class AppointmentAdmin(ModelAdmin):
     Custom admin configuration for the Appointment model.
     """
     # --- List Display Configuration ---
-    list_display = ('patient', 'doctor', 'appointment_date', 'status', 'service')  # Corrected field name
+    list_display = ('patient', 'doctor', 'appointment_date','appointment_time', 'status', 'service')  # Corrected field name
 
     # --- Filtering and Searching ---
-    list_filter = ('status', 'doctor', 'appointment_date')
+    list_filter = ('status', 'doctor', 'appointment_date','appointment_time', 'service')  # Corrected field name
     search_fields = ('patient__patient_name', 'doctor__doctor_name')
 
     # --- Form Field Configuration ---
     fieldsets = (
         ('Appointment Details', {
-            'fields': ('patient', 'doctor', 'appointment_date')
+            'fields': ('patient', 'doctor', 'appointment_date','appointment_time')
         }),
         ('Service Information', {
             'fields': ('service', 'sub_service')  # Corrected field name

@@ -876,6 +876,22 @@
     gap: 1.2rem;
 }
 
+.register-form .form-control {
+    padding: 0.7em 1em;
+    border: 1px solid rgb(0, 161, 93);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f6f8fb;
+    color: #2d3a4a;
+    transition: border 0.2s;
+}
+
+.register-form .form-control:focus {
+    border: 1.5px solid rgb(0, 161, 93);
+    outline: none;
+}
+
+
 .register-form label {
     color: rgb(0, 161, 93);
     font-weight: 500;

@@ -41,7 +41,7 @@
     <div class="appointment-card upcoming">
         <div class="appointment-info">
             <span class="date">{{ appointment.appointment_date|date:"F j, Y" }}</span>
-            <span class="time">{{ appointment.appointment_date|date:"g:i A" }}</span>
+            <span class="time">{{ appointment.appointment_time|time:"g:i A" }}</span>
             <span class="doctor">{{ appointment.doctor.profile }}</span>
             <span class="service">{{ appointment.service.name }}</span>
         </div>
@@ -54,13 +54,13 @@
     {% endfor %}
 </div>
 
-                <div class="appointment-records-list" id="past-appointments" style="display:none;">
+                <div class="appointment-records-list" id="past-appointments">
     {% for appointment in appointments %}
         {% if appointment.status == 'completed' %}
         <div class="appointment-card past">
             <div class="appointment-info">
                 <span class="date">{{ appointment.appointment_date|date:"F j, Y" }}</span>
-                <span class="time">{{ appointment.appointment_date|date:"g:i A" }}</span>
+                <span class="time">{{ appointment.appointment_time|time:"g:i A" }}</span>
                 <span class="doctor">{{ appointment.doctor.profile }}</span>
                 <span class="service"
       data-service="{{ appointment.service.name|default:'N/A' }}"

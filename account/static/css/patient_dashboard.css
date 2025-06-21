@@ -1098,9 +1098,7 @@ body {
     }
 }
 
-/*appointment form.css*/
-
-/* Appointment Form Styles */
+/* Appointment Main Layout */
 .appointment-main {
     display: flex;
     gap: 2.5rem;
@@ -1111,9 +1109,11 @@ body {
     flex-wrap: wrap;
 }
 
+/* Form Container */
 .appointment-form-container {
     background: #fff;
-    max-width: 420px;
+    width: 100%;
+    height: 100%;
     min-width: 320px;
     margin: 0;
     padding: 2.5rem 2rem 2rem 2rem;
@@ -1125,6 +1125,7 @@ body {
     flex: 1 1 340px;
 }
 
+/* Form Heading */
 .appointment-form-container h2 {
     color: #10b981;
     margin-bottom: 1.5rem;
@@ -1133,13 +1134,26 @@ body {
     text-align: center;
 }
 
-form {
+/* Full Form Styling */
+.appointment-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 1.5rem 2rem; /* vertical and horizontal spacing */
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
+    min-width: 1000px;
 }
 
+
+/* Field Wrappers */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+
+/* Form Labels */
 label {
     font-weight: 600;
     color: #1a355c;
@@ -1152,37 +1166,41 @@ label {
     font-size: 1.1em;
 }
 
-input[type="date"],
-input[type="time"],
-select,
-textarea {
+/* Form Control Style (Used by Django widgets) */
+.form-control {
     width: 100%;
     padding: 0.7rem 1rem;
+    font-size: 1rem;
+    color: #1a355c;
+    background: #f9fafb;
     border: 1px solid #d1d5db;
     border-radius: 8px;
-    font-size: 1rem;
-    background: #f9fafb;
-    color: #1a355c;
-    transition: border 0.2s;
     margin-top: 0.2rem;
     box-sizing: border-box;
+    transition: border 0.2s ease, background 0.2s ease;
 }
 
-input[type="date"]:focus,
-input[type="time"]:focus,
-select:focus,
-textarea:focus {
-    border: 1.5px solid #10b981;
-    outline: none;
+.form-control:focus {
+    border-color: #10b981;
     background: #fff;
+    outline: none;
 }
 
-textarea {
-    resize: vertical;
-    min-height: 60px;
-    max-height: 180px;
+.form-control::placeholder {
+    color: #9ca3af;
+    font-style: italic;
 }
 
+/* Error Message Styling */
+.text-danger {
+    color: #e11d48;
+    font-size: 0.95em;
+}
+
+
+
+
+/* Submit Button */
 .book-appointment-btn {
     background: #10b981;
     color: #fff;
@@ -1195,12 +1213,14 @@ textarea {
     margin-top: 0.5rem;
     transition: background 0.2s;
     box-shadow: 0 2px 8px rgba(16,185,129,0.08);
+    grid-column: span 3;
 }
 
 .book-appointment-btn:hover {
     background: #059669;
 }
 
+/* Calendar Section */
 .appointment-calendar-container {
     background: #fff;
     min-width: 320px;
@@ -1223,6 +1243,7 @@ textarea {
     text-align: center;
 }
 
+/* Placeholder Calendar View */
 .calendar-placeholder {
     display: flex;
     flex-direction: column;
@@ -1236,16 +1257,7 @@ textarea {
     box-sizing: border-box;
 }
 
-@media (max-width: 600px) {
-    .appointment-form-container {
-        max-width: 98vw;
-        padding: 1.2rem 0.5rem;
-    }
-    form {
-        gap: 1rem;
-    }
-}
-
+/* Responsive Styling */
 @media (max-width: 900px) {
     .appointment-main {
         flex-direction: column;
@@ -1253,6 +1265,7 @@ textarea {
         gap: 1.5rem;
         padding-left: 0 !important;
     }
+
     .appointment-form-container,
     .appointment-calendar-container {
         max-width: 98vw;
@@ -1260,38 +1273,21 @@ textarea {
         margin: 0 auto;
     }
 }
-.appointment-date-group {
-    margin-bottom: 1.5em;
-}
 
-.appointment-date-group label {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 0.4em;
-    color: #2d3a4a;
-}
+@media (max-width: 600px) {
+    .appointment-form-container {
+        max-width: 98vw;
+        padding: 1.2rem 0.5rem;
+    }
 
-.appointment-date-group input[type="datetime-local"],
-.appointment-date-group input[type="text"] {
-    width: 100%;
-    max-width: 390px;
-    padding: 0.7em 1em;
-    border: 1.5px solid #10b981;
-    border-radius: 6px;
-    font-size: 1rem;
-    background: #f6f8fb;
-    color: #2d3a4a;
-    transition: border 0.2s;
+    .appointment-form {
+        gap: 1rem;
+    }
 }
-
-.appointment-date-group input[type="datetime-local"]:focus,
-.appointment-date-group input[type="text"]:focus {
-    border-color: #059669;
-    outline: none;
-}
-
-.appointment-date-error {
-    color: #e11d48;
-    font-size: 0.95em;
-    margin-top: 0.2em;
+.flatpickr-input {
+  background: #f9fafb;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1a355c;
 }

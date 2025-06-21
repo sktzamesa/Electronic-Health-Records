@@ -202,3 +202,8 @@ def available_slots(request):
         # ... more slots ...
     ]
     return JsonResponse({'slots': slots})
+
+def get_sub_services(request):
+    service_id = request.GET.get('service_id')
+    sub_services = SubService.objects.filter(service_id=service_id).values('id', 'SubService')
+    return JsonResponse(list(sub_services), safe=False)

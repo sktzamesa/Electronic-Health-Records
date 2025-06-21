@@ -70,51 +70,23 @@ if (appointmentForm) {
         alert('Your appointment request has been submitted!');
     });
 }
+ flatpickr("#appointment-time", {
+  enableTime: true,
+  noCalendar: true,
+  dateFormat: "h:i K",       // 12-hour format with AM/PM
+  time_24hr: false,
+  minuteIncrement: 60,
+  minTime: "09:00",
+  maxTime: "18:00",
+  defaultHour: 9
+});
 
-// Flatpickr calendar
-if (typeof flatpickr !== "undefined" && document.getElementById('calendar-widget')) {
-    const calendar = flatpickr("#calendar-widget", {
-        inline: true,
-        minDate: "today",
-        onChange: function(selectedDates, dateStr, instance) {
-            document.getElementById('appointmentDate').value = dateStr;
-        }
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const dateInput = document.getElementById('appointment-date');
+    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    dateInput.setAttribute('min', today);
+});
 
-    const appointmentDate = document.getElementById('appointmentDate');
-    if (appointmentDate) {
-        appointmentDate.addEventListener('change', function() {
-            calendar.setDate(this.value, true);
-        });
-    }
-}
-
-// Sub-service options logic
-const subServices = {
-    service_1: ["sub_one", "sub_two", "sub_three"],
-    service_2: ["sub_one", "sub_two", "sub_three"],
-    service_3: ["sub_one", "sub_two", "sub_three"]
-};
-
-const serviceType = document.getElementById('serviceType');
-const subServiceType = document.getElementById('subServiceType');
-if (serviceType && subServiceType) {
-    serviceType.addEventListener('change', function() {
-        subServiceType.innerHTML = '<option value="">Select a sub-service</option>';
-        const selected = this.value;
-        if (subServices[selected]) {
-            subServices[selected].forEach(sub => {
-                const opt = document.createElement('option');
-                opt.value = sub;
-                opt.textContent = sub;
-                subServiceType.appendChild(opt);
-            });
-            subServiceType.disabled = false;
-        } else {
-            subServiceType.disabled = true;
-        }
-    });
-}
 
 // Patient Profile Picture Dropdown & Change Logic
 const cameraBtn = document.getElementById('cameraBtn');
@@ -235,3 +207,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceSelect = document.getElementById('id_service');
+    const subServiceSelect = document.getElementById('id_sub_service');
+
+    // Reset sub-service dropdown
+    function resetSubServiceSelect(message = 'Select a sub-service') {
+        subServiceSelect.innerHTML = `<option value="">${message}</option>`;
+        subServiceSelect.disabled = true;
+    }
+
+    serviceSelect.addEventListener('change', function() {
+        const serviceId = this.value;
+
+        if (serviceId) {
+            fetch(`/get-sub-services/?service_id=${serviceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    resetSubServiceSelect();
+                    data.forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub.id;
+                        option.textContent = sub.SubService;
+                        subServiceSelect.appendChild(option);
+                    });
+                    subServiceSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error fetching sub-services:', error);
+                    resetSubServiceSelect('Error loading sub-services');
+                });
+        } else {
+            resetSubServiceSelect();
+        }
+    });
+
+    // Trigger initial reset
+    resetSubServiceSelect('Select a service first');
+});
