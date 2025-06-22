@@ -205,5 +205,5 @@ def available_slots(request):
 
 def get_sub_services(request):
     service_id = request.GET.get('service_id')
-    sub_services = SubService.objects.filter(service_id=service_id).values('id', 'SubService')
+    sub_services = SubService.objects.filter(service_id=service_id).values('id', 'SubService', 'price')
     return JsonResponse(list(sub_services), safe=False)

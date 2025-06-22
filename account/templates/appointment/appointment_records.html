@@ -28,17 +28,19 @@
             <section class="appointment-records-section" id="appointment-records-section">
                 <!-- ===== Tabs for Appointment Status ===== -->
                 <div class="appointment-records-header">
-    <div class="appointment-records-tabs">
-        <button class="tab-btn active" data-tab="upcoming">Upcoming</button>
-        <button class="tab-btn" data-tab="past">Completed</button>
-    </div>
+<div class="appointment-records-tabs">
+    <button class="tab-btn active" data-tab="pending">Pending</button>
+    <button class="tab-btn" data-tab="confirm">Confirm</button>
+    <button class="tab-btn" data-tab="past">Completed</button>
+</div>
+
 </div>
 
 
-<div class="appointment-records-list" id="upcoming-appointments">
+<div class="appointment-records-list" id="pending-appointments" style="display: block;">
     {% for appointment in appointments %}
-    {% if appointment.status == 'confirm' or appointment.status == 'pending' %}
-    <div class="appointment-card upcoming">
+    {% if appointment.status == 'pending' %}
+    <div class="appointment-card pending">
         <div class="appointment-info">
             <span class="date">{{ appointment.appointment_date|date:"F j, Y" }}</span>
             <span class="time">{{ appointment.appointment_time|time:"g:i A" }}</span>
@@ -50,11 +52,34 @@
             <button class="cancel-btn" onclick="cancelAppointment(this)">Cancel</button>
         </div>
     </div>
+    {% else %}
+    <h1 style="font-family: Arial, Helvetica, sans-serif;font-size: 20px;">No pending appointments</h1>
     {% endif %}
     {% endfor %}
 </div>
 
-                <div class="appointment-records-list" id="past-appointments">
+<div class="appointment-records-list" id="confirm-appointments" style="display: none;">
+    {% for appointment in appointments %}
+    {% if appointment.status == 'confirm' %}
+    <div class="appointment-card confirm">
+        <div class="appointment-info">
+            <span class="date">{{ appointment.appointment_date|date:"F j, Y" }}</span>
+            <span class="time">{{ appointment.appointment_time|time:"g:i A" }}</span>
+            <span class="doctor">{{ appointment.doctor.profile }}</span>
+            <span class="service">{{ appointment.service.name }}</span>
+        </div>
+        <div class="appointment-actions">
+            <span class="status upcoming">{{ appointment.status }}</span>
+            <button class="cancel-btn" onclick="cancelAppointment(this)">Cancel</button>
+        </div>
+    </div>
+    {% else %}
+    <h1 style="font-family: Arial, Helvetica, sans-serif;font-size: 20px;">No confirm appointments</h1>
+    {% endif %}
+    {% endfor %}
+</div>
+
+                <div class="appointment-records-list" id="past-appointments" style="display: none;">
     {% for appointment in appointments %}
         {% if appointment.status == 'completed' %}
         <div class="appointment-card past">
@@ -77,6 +102,8 @@
                 <button class="view-btn" onclick="viewAppointmentDetails(this)">View Details</button>
             </div>
         </div>
+            {% else %}
+    <h1 style="font-family: Arial, Helvetica, sans-serif;font-size: 20px;">No completed appointments</h1>
         {% endif %}
     {% endfor %}
 </div>
@@ -157,26 +184,28 @@
         document.getElementById('appointmentModal').style.display = 'none';
     }
 
-    // ===== Tab Switching Logic =====
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            // Remove active from all buttons
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
+// ===== Tab Switching Logic =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        // Remove 'active' class from all buttons
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
 
-            // Hide all appointment lists
-            ['upcoming-appointments', 'past-appointments', 'rescheduled-appointments'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = "none";
-            });
-
-            // Show the selected tab
-            const tab = this.dataset.tab;
-            const showId = tab + '-appointments';
-            const showEl = document.getElementById(showId);
-            if (showEl) showEl.style.display = "block";
+        // Hide all appointment sections
+        ['pending-appointments', 'confirm-appointments', 'past-appointments'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
         });
+
+        // Show the selected section
+        const tab = this.dataset.tab;
+        const showId = tab + '-appointments';
+        const showEl = document.getElementById(showId);
+        if (showEl) showEl.style.display = 'block';
     });
+});
+
+
 
     // ===== Cancel Appointment Logic =====
     let appointmentToCancel = null;

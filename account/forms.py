@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-# appointment/forms.py
 from patients.models import Appointment, Service, SubService
 from doctor.models import Doctor
 from django.core.exceptions import ValidationError
@@ -24,22 +23,29 @@ class AppointmentForm(forms.ModelForm):
                 }
             ),
             'appointment_time': forms.TextInput(attrs={
-                    'class': 'form-control',
-                    'id': 'appointment-time',
-                    }),
-
+                'class': 'form-control',
+                'id': 'appointment-time',
+            }),
         }
-#dito need dapat ma-align ung date and time sa flatpickr
-#base sa kung ano ung nasa javascript na flatpickr
+
+    # dito need dapat ma-align ung date and time sa flatpickr
+    # base sa kung ano ung nasa javascript na flatpickr
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['appointment_time'].input_formats = ['%I:%M %p']  # Matches Flatpickr's "h:i K" format
+
+        # Add price display for service field
+        self.fields['service'].label_from_instance = lambda obj: f"{obj.name} (₱{obj.price})"
+
+        # Add price display for sub_service field
+        self.fields['sub_service'].label_from_instance = lambda obj: f"{obj.SubService} (₱{obj.price})"
 
     def clean_appointment_time(self):
         appointment_time = self.cleaned_data.get('appointment_time')
         if appointment_time and appointment_time.minute != 0:
             raise ValidationError("Appointment time must be on the hour (e.g., 10:00, 11:00).")
         return appointment_time
+
 class RegisterForm(forms.Form):
 
     name = forms.CharField(

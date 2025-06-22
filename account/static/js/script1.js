@@ -225,12 +225,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     resetSubServiceSelect();
-                    data.forEach(sub => {
-                        const option = document.createElement('option');
-                        option.value = sub.id;
-                        option.textContent = sub.SubService;
-                        subServiceSelect.appendChild(option);
-                    });
+data.forEach(sub => {
+    const option = document.createElement('option');
+    option.value = sub.id;
+    option.textContent = `${sub.SubService} (₱${sub.price})`;
+    subServiceSelect.appendChild(option);
+});
+
                     subServiceSelect.disabled = false;
                 })
                 .catch(error => {
@@ -245,3 +246,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Trigger initial reset
     resetSubServiceSelect('Select a service first');
 });
+
