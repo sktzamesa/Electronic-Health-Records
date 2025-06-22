@@ -1,7 +1,8 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import CustomLoginView
+from .views import CustomLoginView,clinicadmin
+
 urlpatterns = [
     path('',views.homepage,name='home'),
     path('register/', views.register, name='register'),
@@ -18,6 +19,6 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('get-sub-services/', views.get_sub_services, name='get_sub_services'),
-
+    path('clinic-admin',clinicadmin.as_view(),name = 'clinic_admin'),
 
 ]

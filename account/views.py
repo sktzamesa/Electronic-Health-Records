@@ -13,16 +13,26 @@ from .forms import AppointmentForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import User
+from django.views.generic.list import ListView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
 
 class CustomLoginView(LoginView):
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
-        if user.is_staff or user.is_superuser:
+        if user.is_staff:
+            return redirect('/clinic-admin')
+        elif user.is_superuser:
             return redirect('/admin/')
         return redirect('dashboard')
 
-# Create your views here.
+class clinicadmin(ListView,PermissionRequiredMixin):
+    model = Appointment
+    template_name = 'clinic_admin.html'
+    context_object_name = 'appointment'
+
+
 def homepage(request):
     return render(
         request,
