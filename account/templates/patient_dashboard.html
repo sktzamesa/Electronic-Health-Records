@@ -56,7 +56,6 @@
             <div class="doctor-details">
                 <div class="doctor-name">Dr. {{ doctor.profile.user.get_full_name|default:doctor.profile.user.username }}</div>
                 <div class="doctor-specialty">{{ doctor.specialization }}</div>
-                <div class="doctor-status active">Status: {{ doctor.status }}</div>
             </div>
             <div class="doctor-dropdown">
                 <button class="doctor-dropdown-btn" onclick="toggleDoctorDropdown(event, this)">⋮</button>

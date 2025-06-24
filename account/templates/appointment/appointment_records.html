@@ -52,8 +52,6 @@
             <button class="cancel-btn" onclick="cancelAppointment(this)">Cancel</button>
         </div>
     </div>
-    {% else %}
-    <h1 style="font-family: Arial, Helvetica, sans-serif;font-size: 20px;">No pending appointments</h1>
     {% endif %}
     {% endfor %}
 </div>
@@ -73,8 +71,6 @@
             <button class="cancel-btn" onclick="cancelAppointment(this)">Cancel</button>
         </div>
     </div>
-    {% else %}
-    <h1 style="font-family: Arial, Helvetica, sans-serif;font-size: 20px;">No confirm appointments</h1>
     {% endif %}
     {% endfor %}
 </div>
@@ -102,8 +98,6 @@
                 <button class="view-btn" onclick="viewAppointmentDetails(this)">View Details</button>
             </div>
         </div>
-            {% else %}
-    <h1 style="font-family: Arial, Helvetica, sans-serif;font-size: 20px;">No completed appointments</h1>
         {% endif %}
     {% endfor %}
 </div>

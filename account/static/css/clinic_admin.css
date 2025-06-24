@@ -81,6 +81,7 @@ body {
     background: rgba(0,161,93,0.18);
     border-radius: 8px;
 }
+
 .sidebar.collapsed .sidebar-text {
     display: none;
 }
@@ -263,4 +264,311 @@ body {
 .admin-table td .profile-action-btn:focus {
     background: #059669;
     box-shadow: 0 4px 16px rgba(16,185,129,0.15);
+}
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.status-tag.pending {
+    background-color: #ffc107;
+    color: #333;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.action-btn {
+    padding: 0.4rem 0.8rem;
+    text-decoration: none;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.action-btn.confirm {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.action-btn.cancel {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.no-data {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+/* Base Section Title Style */
+.section-header .section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-left: 1rem;
+    border-left: 5px solid transparent; /* Default: no color */
+}
+
+/* Green for pending */
+.pending-appointments.status-pending .section-header .section-title {
+    border-left-color: #28a745;
+}
+
+/* Purple for confirmed */
+.confirmed-appointments.status-confirm .section-header .section-title {
+    border-left-color: #6f42c1; /* Bootstrap-inspired purple */
+}
+
+
+.dashboard-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+    margin-top: 1.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+
+.dashboard-table thead tr {
+    background-color: #f5f5f5;
+    color: #444;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    padding: 0.9rem 1rem;
+    background-color: #fff;
+    text-align: left;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.dashboard-table tbody tr:hover td {
+    background-color: #f9f9f9;
+}
+
+.status-tag.pending {
+    background-color: #ffd966;
+    color: #5c4b00;
+    padding: 0.35rem 0.7rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 1px #fff inset;
+}
+
+.action-btn {
+    padding: 0.4rem 0.85rem;
+    text-decoration: none;
+    margin-bottom: 0.4rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+}
+
+.action-btn.confirm {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.action-btn.confirm:hover {
+    background-color: #218838;
+}
+
+.action-btn.cancel {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.action-btn.cancel:hover {
+    background-color: #c82333;
+}
+
+.no-data {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 1rem 0;
+}
+/* Completed - Green */
+.action-btn.complete {
+  background-color: #4CAF50; /* Success green */
+  color: white;
+}
+.action-btn.complete:hover {
+  background-color: #43a047;
+}
+
+/* No Show - Red */
+.action-btn.no-show {
+  background-color: #f44336; /* Alert red */
+  color: white;
+}
+.action-btn.no-show:hover {
+  background-color: #e53935;
+}
+
+/* Optional: Responsive adjustment */
+@media screen and (max-width: 768px) {
+  .action-btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+}
+/* Blue accent for completed section */
+.completed-appointments.status-completed .section-header .section-title {
+    border-left-color: #007bff;
+}
+
+.status-tag.completed {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.35rem 0.7rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 1px #fff inset;
+}
+
+.action-btn.view {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.action-btn.view:hover {
+    background-color: #138496;
+}
+
+/* Blue-gray accent for No Show section */
+/* Section title for No Show */
+.no-show-appointments.status-no-show .section-header .section-title {
+    border-left-color: #f50505;
+}
+
+/* Scoped table layout */
+.no-show-table {
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+    margin-top: 1.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+}
+
+.no-show-table th,
+.no-show-table td {
+    padding: 0.9rem 1rem;
+    background-color: #fff;
+    text-align: left;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    white-space: nowrap;
+}
+
+.no-show-table td:nth-child(2) {
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.82rem;
+}
+
+/* Row highlight on hover */
+.no-show-table tbody tr:hover td {
+    background-color: #f9f9f9;
+}
+
+/* Status tag for no-show */
+.status-tag.no-show {
+    background-color: #b40909;
+    color: #f3f3f3;
+    padding: 0.35rem 0.7rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 1px #fff inset;
+}
+
+/* Follow-up button */
+.action-btn.follow-up {
+    background-color: #6c63ff;
+    color: #fff;
+}
+
+.action-btn.follow-up:hover {
+    background-color: #554dde;
+}
+
+/* Optional view button (if needed) */
+.action-btn.view {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.action-btn.view:hover {
+    background-color: #138496;
+}
+
+.see-details-btn {
+    color: #0776d1;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  max-width: 400px;
+}
+
+.search-form input[type="text"] {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+}
+
+.search-form input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.search-form button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-form button:hover {
+  background-color: #0056b3;
 }

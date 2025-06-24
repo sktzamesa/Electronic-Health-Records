@@ -247,3 +247,16 @@ data.forEach(sub => {
     resetSubServiceSelect('Select a service first');
 });
 
+
+
+  function toggleHistory() {
+    const section = document.getElementById("historical-confirmed");
+    const label = document.getElementById("history-toggle-label");
+
+    const isHidden = section.style.display === "none";
+
+    section.style.display = isHidden ? "" : "none";
+    label.textContent = isHidden
+      ? "Hide previously confirmed appointments ▲"
+      : "Show previously confirmed appointments ▼";
+  }

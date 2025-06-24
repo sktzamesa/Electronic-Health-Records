@@ -1,0 +1,133 @@
+    {% extends 'admin_base.html' %}
+    {% block title %} Confirmed {% endblock %}
+
+    {% block content %}
+    
+<!-- Main Dashboard Content -->
+<div class="dashboard-content" id="dashboardContent">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-user">
+            <span>Welcome!</span>
+            <!-- Logout Form -->
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Dashboard Main -->
+    <main class="dashboard-main">
+        <section class="admin-dashboard-overview">
+            <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
+
+<!-- Confirmed Appointments Table -->
+<div class="confirmed-appointments status-confirm">
+  <div class="section-header">
+    <h3 class="section-title">Confirmed Appointments</h3>
+  </div>
+<form method="get" class="search-form">
+  <input type="text" name="q" placeholder="Search by patient, doctor, or email…" value="{{ request.GET.q }}">
+  <button type="submit">Search</button>
+</form>
+  <div class="table-scroll-x">
+    <table class="dashboard-table">
+      <!-- Toggle button (always visible) -->
+<tr class="expand-toggle" onclick="toggleHistory()" style="cursor:pointer;">
+  <td colspan="9">
+    <em id="history-toggle-label">Show previously confirmed appointments ▼</em>
+  </td>
+</tr>
+
+<!-- Hidden historical records (only the rows, not the button) -->
+<tbody id="historical-confirmed" style="display: none;">
+  {% for appointment in historical_confirmed %}
+  <tr class="historical">
+    <td>{{ appointment.patient.profile.user.get_full_name }}</td>
+    <td>{{ appointment.patient.profile.user.email }}</td>
+    <td>{{ appointment.doctor.profile.user.get_full_name }}</td>
+    <td>{{ appointment.service.name }}</td>
+    <td>{{ appointment.sub_service.name }}</td>
+    <td>{{ appointment.appointment_date }}</td>
+    <td>{{ appointment.appointment_time|time:"h:i A" }}</td>
+    <td>{{ user.username}}</td>
+    <td><span class="status-tag">{{ appointment.get_status_display }}</span></td>
+    <td><em>—</em></td>
+  </tr>
+  {% endfor %}
+</tbody>
+    </table>
+  <table class="dashboard-table">
+  <thead>
+    <tr>
+      <th>Patient</th>
+      <th>Email</th>
+      <th>Doctor</th>
+      <th>Service</th>
+      <th>Sub-Service</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for appointment in appointments %}
+    <tr>
+      <td>{{ appointment.patient.profile.user.get_full_name|default:appointment.patient.profile.user.username }}</td>
+      <td>{{ appointment.patient.profile.user.email }}</td>
+      <td>{{ appointment.doctor.profile.user.get_full_name|default:appointment.doctor.profile.user.username }}</td>
+      <td>{{ appointment.service.name }}</td>
+      <td>{{ appointment.sub_service.name }}</td>
+      <td>{{ appointment.appointment_date }}</td>
+      <td>{{ appointment.appointment_time|time:"h:i A" }}</td>
+      <td>
+        <span class="status-tag confirm">{{ appointment.get_status_display }}</span>
+      </td>
+      <td>
+        <form method="post" action="{% url 'update_appointment_status' appointment.id %}" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="completed">
+          <input type="hidden" name="next_status_page" value="completed">
+          <button type="submit" class="action-btn complete">Completed</button>
+        </form>
+        <form method="post" action="{% url 'update_appointment_status' appointment.id %}" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="no-show">
+          <input type="hidden" name="next_status_page" value="no-show">
+          <button type="submit" class="action-btn no-show">No Show</button>
+        </form>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="9">No confirmed appointments found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+  {% if historical_confirmed %}
+<!-- Main confirmed appointments -->
+<tbody>
+  {% for appointment in appointments %}
+  <tr>
+    <!-- normal confirmed appointment rows -->
+  </tr>
+  {% endfor %}
+</tbody>
+
+
+
+  {% endif %}
+</table>
+
+  </div>
+</div>
+
+
+        </section>
+    </main>
+</div>
+    {% endblock %}

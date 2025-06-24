@@ -20,5 +20,7 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('get-sub-services/', views.get_sub_services, name='get_sub_services'),
     path('clinic-admin',clinicadmin.as_view(),name = 'clinic_admin'),
+    path('appointments/<str:status>/', views.appointment_status_view, name='appointment_status'),
+    path('appointments/<int:appointment_id>/update/', views.update_appointment_status, name='update_appointment_status'),
 
 ]

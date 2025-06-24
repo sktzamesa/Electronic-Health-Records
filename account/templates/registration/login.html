@@ -42,7 +42,7 @@ Your privacy and oral health are our top priorities.
 
 <form class="login-form" method="post">
     {% if form.errors %}
-    <p style="color: red;">Your username and password didn't match.</p>
+    <p style="color: red;">Invalid login credentials.</p>
 {% endif %}
     {% csrf_token %}
     <div class="form-group">

@@ -19,6 +19,7 @@ class Appointment(models.Model):
         ('confirm', 'Confirm'),
         ('pending', 'Pending'),
         ('completed', 'Completed'),
+        ('no-show', 'No-Show'),
     )
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='appointments')
     patient = models.ForeignKey('Patient', on_delete=models.CASCADE, related_name='appointments')
@@ -46,6 +47,16 @@ class SubService(models.Model):
 
     def __str__(self):
         return self.SubService
+
+class AppointmentStatusLog(models.Model):
+    appointment = models.ForeignKey('Appointment', on_delete=models.CASCADE, related_name='status_logs')
+    old_status = models.CharField(max_length=20)
+    new_status = models.CharField(max_length=20)
+    changed_by = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True)
+    changed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.appointment} changed from {self.old_status} to {self.new_status} on {self.changed_at}"
 
 
 

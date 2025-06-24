@@ -6,31 +6,49 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.http import JsonResponse
 from django.contrib import messages
-from patients.models import Appointment, Service, SubService, Patient
+from patients.models import Appointment, Service, SubService, Patient, AppointmentStatusLog
 from doctor.models import Doctor
 from datetime import datetime
 from .forms import AppointmentForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models import Q
 
 
 class CustomLoginView(LoginView):
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
-        if user.is_staff:
-            return redirect('/clinic-admin')
-        elif user.is_superuser:
+        if user.is_superuser:
             return redirect('/admin/')
+        elif user.is_staff:
+            return redirect('/clinic-admin')
         return redirect('dashboard')
 
-class clinicadmin(ListView,PermissionRequiredMixin):
+
+
+class clinicadmin(ListView):
     model = Appointment
     template_name = 'clinic_admin.html'
     context_object_name = 'appointment'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = now().date()
+
+        context.update({
+            'total_patients': Patient.objects.count(),
+            'todays_appointments': Appointment.objects.filter(appointment_date=today).count(),
+            'pending_count': Appointment.objects.filter(status='pending').count(),
+            'confirmed_count': Appointment.objects.filter(status='confirm').count(),
+            'completed_count': Appointment.objects.filter(status='completed').count(),
+            'no_show_count': Appointment.objects.filter(status='no-show').count(),
+        })
+        return context
 
 
 def homepage(request):
@@ -145,8 +163,6 @@ def profile(request):
             }
         )
 
-
-# Python
 @login_required
 def appointment_form(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
@@ -217,3 +233,72 @@ def get_sub_services(request):
     service_id = request.GET.get('service_id')
     sub_services = SubService.objects.filter(service_id=service_id).values('id', 'SubService', 'price')
     return JsonResponse(list(sub_services), safe=False)
+
+@login_required
+def appointment_status_view(request, status):
+    template_map = {
+        'confirm': 'confirm.html',
+        'pending': 'pending.html',
+        'completed': 'completed.html',
+        'no-show': 'no_show.html',
+    }
+
+    template_name = template_map.get(status)
+    if not template_name:
+        return render(request, 'appointments/404.html', status=404)
+
+    # Current appointments with matching status
+    appointments = Appointment.objects.filter(status=status)
+
+    # Include historical confirmations if viewing 'confirm'
+    historical_confirmed = None
+    if status == "confirm":
+        past_ids = AppointmentStatusLog.objects.filter(old_status="confirm") \
+            .values_list("appointment_id", flat=True)
+        historical_confirmed = Appointment.objects.filter(id__in=past_ids).exclude(status="confirm")
+
+    # Apply search query if present
+    query = request.GET.get('q')
+    if query:
+        appointments = appointments.filter(
+            Q(patient__profile__user__first_name__icontains=query) |
+            Q(patient__profile__user__last_name__icontains=query) |
+            Q(patient__profile__user__email__icontains=query) |
+            Q(doctor__profile__user__first_name__icontains=query) |
+            Q(doctor__profile__user__last_name__icontains=query)
+        )
+
+    context = {
+        'appointments': appointments,
+        'status': status,
+        'historical_confirmed': historical_confirmed if historical_confirmed else [],
+    }
+
+    return render(request, template_name, context)
+
+@login_required
+def update_appointment_status(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        next_page = request.POST.get("next_status_page", "confirm")
+
+        valid_transitions = ["confirm", "completed", "no-show"]
+
+        if new_status in valid_transitions and new_status != appointment.status:
+            # Log the change for audit/history
+            AppointmentStatusLog.objects.create(
+                appointment=appointment,
+                old_status=appointment.status,
+                new_status=new_status,
+                changed_by=request.user
+            )
+
+            # Apply the new status to the appointment
+            appointment.status = new_status
+            appointment.save()
+
+        return redirect("appointment_status", status=next_page)
+
+    return redirect("appointment_status", status="confirm")
