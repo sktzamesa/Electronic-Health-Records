@@ -17,6 +17,8 @@ from django.utils.timezone import now
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class CustomLoginView(LoginView):
@@ -247,17 +249,14 @@ def appointment_status_view(request, status):
     if not template_name:
         return render(request, 'appointments/404.html', status=404)
 
-    # Current appointments with matching status
     appointments = Appointment.objects.filter(status=status)
 
-    # Include historical confirmations if viewing 'confirm'
     historical_confirmed = None
     if status == "confirm":
         past_ids = AppointmentStatusLog.objects.filter(old_status="confirm") \
             .values_list("appointment_id", flat=True)
         historical_confirmed = Appointment.objects.filter(id__in=past_ids).exclude(status="confirm")
 
-    # Apply search query if present
     query = request.GET.get('q')
     if query:
         appointments = appointments.filter(
@@ -295,10 +294,41 @@ def update_appointment_status(request, appointment_id):
                 changed_by=request.user
             )
 
-            # Apply the new status to the appointment
+            # Apply the new status
             appointment.status = new_status
             appointment.save()
+
+            # Get users
+            patient_user = appointment.patient.profile.user
+            doctor_user = appointment.doctor.profile.user
+
+            patient_email = patient_user.email
+            patient_name = patient_user.get_full_name() or patient_user.username
+            doctor_name = doctor_user.get_full_name() or doctor_user.username
+
+            appointment_date = appointment.appointment_date
+            appointment_time = appointment.appointment_time.strftime('%I:%M %p')
+
+            if new_status == "confirm":
+                subject = "Your Appointment Has Been Confirmed"
+                message = (
+                    f"Dear {patient_name},\n\n"
+                    f"Your appointment with Dr. {doctor_name} on {appointment_date} at {appointment_time} "
+                    f"has been confirmed.\n\nThank you!"
+                )
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [patient_email])
+
+            elif new_status == "completed":
+                subject = "Your Appointment Has Been Completed"
+                message = (
+                    f"Dear {patient_name},\n\n"
+                    f"Your appointment with Dr. {doctor_name} on {appointment_date} at {appointment_time} "
+                    f"has been marked as completed.\n\nThank you!"
+                )
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [patient_email])
 
         return redirect("appointment_status", status=next_page)
 
     return redirect("appointment_status", status="confirm")
+
+
