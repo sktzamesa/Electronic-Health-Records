@@ -82,16 +82,14 @@ SECRET_KEY = 'django-insecure-y)cl$q9+56ilg3(6@wwj5ak7txw499*2cx7$$xbu&ra-)^g6r1
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'two_factor:login'
+LOGIN_URL = 'two_factor:login'
 LOGOUT_URL = 'logout'
 
 EMAIL_HOST = 'smtp.gmail.com'
@@ -117,6 +115,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
+    'crispy_forms',
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_email',  # <- for email capability.
+    'two_factor',
+    'two_factor.plugins.email',  # <- for email capability.
     'patients.apps.PatientsConfig',
     'doctor.apps.DoctorConfig'
 ]
@@ -128,6 +134,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

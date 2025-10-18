@@ -1,0 +1,62 @@
+{% extends 'admin_base.html' %}
+
+{% block title %} Clinic Admin Dashboard {% endblock %}
+
+    {% block content %}
+<div class="dashboard-content" id="dashboardContent">
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+                <span>AI Medical Summarizer</span>
+                <!-- Logout Form -->
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <section class="admin-dashboard-overview">
+                <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
+                                <div class="admin-stats-row">
+
+<form id="summaryForm" onsubmit="return false;"> 
+  <input type="text" id="name" placeholder="Patient Name" required>
+  <input type="number" id="age" placeholder="Age" required>
+  <textarea id="text" placeholder="Enter medical notes..." required></textarea>
+  <button type="button" onclick="summarize()">Summarize</button>
+</form>
+
+<p><b>Result:</b> <span id="result"></span></p>
+
+<script>
+async function summarize() {
+  const name = document.getElementById("name").value;
+  const age = document.getElementById("age").value;
+  const text = document.getElementById("text").value;
+
+  try {
+    const response = await fetch("/summarize/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, age, text })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      document.getElementById("result").textContent = "⚠️ " + data.error;
+    } else {
+      document.getElementById("result").innerHTML = `
+        <div style="border:1px solid #ccc; padding:10px; border-radius:6px; margin-top:10px;">
+          <strong>Summary:</strong><br>${data.summary}
+        </div>
+        <p style="color:green;">✔️ ${data.message}</p>
+      `;
+    }
+  } catch (error) {
+    document.getElementById("result").textContent = "⚠️ Error: " + error.message;
+  }
+}
+</script>
+{% endblock %}

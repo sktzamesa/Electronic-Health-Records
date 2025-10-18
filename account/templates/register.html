@@ -20,7 +20,7 @@
             <li><a href="{% url 'home' %}">Contact Us</a></li>
         </ul>
         <div class="navbar-actions">
-            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'two_factor:login' %}" class="login-btn">Login</a>
             <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
         </div>
     </nav>
@@ -66,7 +66,7 @@
                 </form>
 
                 <div class="register-links">
-                    Already have an account? <a href="{% url 'login' %}">Sign in</a>
+                    Already have an account? <a href="{% url 'two_factor:login' %}">Sign in</a>
                 </div>
             </div>
         </div>

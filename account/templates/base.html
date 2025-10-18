@@ -24,6 +24,10 @@
             <a href="{% url 'dashboard' %}" class="sidebar-link active"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
             <a href="{% url 'appointment' %}" class="sidebar-link"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
             <a href="{% url 'profile' %}" class="sidebar-link"><span>👤</span> <span class="sidebar-text">Profile</span></a>
+            {% if user.is_staff or user.is_superuser %}
+            <a href="{% url 'ai_page' %}" class="sidebar-link"><span>🤖</span> <span class="sidebar-text">AI Assistant</span></a>
+            {% else %}
+            {% endif %}
         </nav>
     </aside>
 

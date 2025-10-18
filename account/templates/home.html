@@ -11,7 +11,7 @@
     <!-- ===== Navbar ===== -->
     <nav class="navbar">
         <div class="navbar-logo">
-            <span class="ehr-logo">LE Dental Clinic</span>
+            <span class="ehr-logo"></span>
         </div>
         <ul class="navbar-links">
             <li><a href="{% url 'home' %}">Home</a></li>
@@ -20,7 +20,7 @@
             <li><a href="#contact">Contact Us</a></li>
         </ul>
         <div class="navbar-actions">
-            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'two_factor:login' %}" class="login-btn">Login</a>
             <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
         </div>
     </nav>

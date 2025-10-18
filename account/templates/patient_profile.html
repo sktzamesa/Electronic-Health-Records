@@ -80,6 +80,16 @@ Profile
                                 <li><a href="{% url 'appointment' %}">View Appointments</a></li>
                             </ul>
                         </div>
+                        <br>
+<div class="container bg-white shadow-md p-5 form-layout">
+<h2>2FA</h2>
+<p>Two-Factor Authentication (2FA) adds an extra layer of security to your account.</p>
+<hr>
+<a class="btn btn-danger navbar-btn" type="button"  href="{% url 'two_factor:setup' %}">Enable</a>
+<br><br>
+<a class="btn btn-primary navbar-btn" type="button"  href="{% url 'two_factor:profile' %}">2FA account settings</a>
+<br>
+</div>
                     </div>
                 </div>
 

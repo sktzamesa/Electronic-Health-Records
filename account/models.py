@@ -23,3 +23,10 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
+
+class MedicalReport(models.Model):
+    patient_name = models.CharField(max_length=100)
+    report_text = models.TextField()
+    summary = models.TextField(blank=True, null=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    age = models.PositiveIntegerField(blank=True, null=True)

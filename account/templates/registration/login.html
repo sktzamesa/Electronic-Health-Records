@@ -11,16 +11,10 @@
     <!-- Landing Page Navbar -->
     <nav class="navbar">
         <div class="navbar-logo">
-            <span class="ehr-logo">LE Dental Clinic</span>
+            <span class="ehr-logo">MediCore</span>
         </div>
-        <ul class="navbar-links">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'home' %}">About Us</a></li>
-            <li><a href="{% url 'home' %}">Services</a></li>
-            <li><a href="{% url 'home' %}">Contact Us</a></li>
-        </ul>
         <div class="navbar-actions">
-            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'two_factor:login' %}" class="login-btn">Login</a>
             <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
         </div>
     </nav>

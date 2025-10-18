@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  {% block extra_media %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span class="ehr-logo">LE Dental Clinic</span>
+        </div>
+        <ul class="navbar-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'home' %}">About Us</a></li>
+            <li><a href="{% url 'home' %}">Services</a></li>
+            <li><a href="{% url 'home' %}">Contact Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a href="{% url 'two_factor:login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
+        </div>
+    </nav>
+
+    <section class="register-section">
+        <div class="register-flex">
+           {% block content_wrapper %}
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  {% endblock %}
+            </div>
+    </section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const birthdayInput = document.getElementById('register-birthday');
+    const ageInput = document.getElementById('register-age');
+
+    // Prevent future birthdays
+    const today = new Date().toISOString().split("T")[0];
+    birthdayInput.max = today;
+
+    birthdayInput.addEventListener('change', function () {
+        const birthDate = new Date(birthdayInput.value);
+        const now = new Date();
+
+        if (!isNaN(birthDate)) {
+            let age = now.getFullYear() - birthDate.getFullYear();
+            const m = now.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && now.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            ageInput.value = age >= 0 ? age : '';
+        }
+    });
+});
+</script>
+
+
+</body>
+</html>
+

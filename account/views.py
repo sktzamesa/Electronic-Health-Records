@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import RegisterForm
 from django.contrib.auth.models import User
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Profile
+from .models import Profile,MedicalReport
 from django.http import JsonResponse
 from django.contrib import messages
 from patients.models import Appointment, Service, SubService, Patient, AppointmentStatusLog
@@ -11,7 +11,6 @@ from doctor.models import Doctor
 from datetime import datetime
 from .forms import AppointmentForm
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.views.generic.list import ListView
@@ -19,24 +18,106 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import JsonResponse
+from transformers import pipeline
+import plotly.express as px
+from django.contrib.auth.mixins import LoginRequiredMixin
+from two_factor.views import LoginView
+from django.contrib.auth.decorators import permission_required
 
+
+summarizer = pipeline(
+    "text2text-generation",
+    model="Falconsai/medical_summarization",
+    device_map="auto"
+)
+
+@permission_required('account.view_medicalreport', raise_exception=True)
+@login_required
+def ai_page(request):
+    return render(request, "ai.html")
+
+
+def summarize_medical_text(text):
+    text = text.strip().replace("\n", " ")
+    input_text = "summarize: " + text  # T5-style prefix
+
+    result = summarizer(
+        input_text,
+        max_new_tokens=150,
+        min_length=40,
+        num_beams=8,
+        temperature=0.6,
+        top_p=0.9,
+        repetition_penalty=2.5,
+        no_repeat_ngram_size=3,
+        do_sample=False
+    )[0]
+
+    summary = result.get("generated_text", "").strip()
+    return summary
+
+@csrf_exempt
+def summarize_report(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            name = data.get("name", "").strip()
+            age = data.get("age")
+            text = data.get("text", "").strip()
+
+            if not name or not age or not text:
+                return JsonResponse({"error": "Missing required fields: name, age, or text"}, status=400)
+
+            # Generate summary
+            summary = summarize_medical_text(text)
+
+            # Save to DB
+            report = MedicalReport.objects.create(
+                patient_name=name,
+                age=age,
+                report_text=text,
+                summary=summary
+            )
+
+            return JsonResponse({
+                "summary": summary,
+                "saved_id": report.id,
+                "message": f"Summary saved for {name} (Age {age})"
+            })
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 class CustomLoginView(LoginView):
-    def form_valid(self, form):
-        user = form.get_user()
-        login(self.request, user)
-        if user.is_superuser:
-            return redirect('/admin/')
-        elif user.is_staff:
-            return redirect('/clinic-admin')
-        return redirect('dashboard')
+    def get_success_url(self):
+        user = self.request.user
+        if user.is_staff:
+            return '/clinic-admin/'
+        elif user.groups.filter(name='manager').exists():
+            return '/manager/'
+        return '/dashboard/'
 
 
+def home(request):
+    return render(
+        request,
+        'home.html',
+    )
+    
 
-class clinicadmin(ListView):
+class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    redirect_field_name = "redirect_to"
     model = Appointment
     template_name = 'clinic_admin.html'
     context_object_name = 'appointment'
+    permission_required = 'account.view_appointment'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -51,14 +132,7 @@ class clinicadmin(ListView):
             'no_show_count': Appointment.objects.filter(status='no-show').count(),
         })
         return context
-
-
-def homepage(request):
-    return render(
-        request,
-        'home.html'
-    )
-
+    
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -141,7 +215,6 @@ def profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
-        # Handle profile picture update if 'avatarInput' is present in FILES
         if request.FILES.get('avatarInput'):
             profile.image = request.FILES['avatarInput']
             profile.save()
