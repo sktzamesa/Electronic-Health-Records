@@ -1,0 +1,202 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+
+<style>
+/* Container uses available space */
+.detail-container {
+    width: 100%;
+    margin: 32px 0;
+    padding: 0 32px;
+}
+
+/* Card is responsive and wide */
+.detail-card {
+    width: 100%;
+    max-width: 1500px;        /* desktop width */
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 18px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+    box-sizing: border-box;
+}
+
+
+
+/* =========================
+   HEADER
+========================= */
+.detail-header {
+    margin-bottom: 28px;
+}
+
+.title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title-group h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.badge {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #4338ca;
+    font-weight: 600;
+}
+
+/* =========================
+   FORM
+========================= */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    color: #111827;
+    background: #ffffff;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+/* 🔒 TEXTAREA FIX (DEFAULT – NOT ADJUSTABLE) */
+.form-group textarea {
+    resize: none;           /* ❌ disable resize */
+    overflow-y: auto;       /* ✔ scroll instead */
+    line-height: 1.6;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Field-specific heights */
+textarea[name="report_text"] {
+    min-height: 220px;
+}
+
+textarea[name="summary"] {
+    min-height: 140px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+}
+
+.btn {
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-back {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #ffffff;
+}
+
+.btn:hover {
+    opacity: 0.92;
+}
+</style>
+
+<div class="detail-container">
+    <div class="detail-card">
+
+        <!-- HEADER -->
+        <div class="detail-header">
+            <div class="title-group">
+                <span>🩺</span>
+                <h1>Medical Report</h1>
+                <span class="badge">Editable</span>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Patient Name</label>
+                <input
+                    type="text"
+                    name="patient_name"
+                    value="{{ report.patient_name }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Age</label>
+                <input
+                    type="number"
+                    name="age"
+                    value="{{ report.age }}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Medical Report</label>
+                <textarea name="report_text" required>{{ report.report_text }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Summary</label>
+                <textarea name="summary">{{ report.summary }}</textarea>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="form-actions">
+                <a href="{% url 'medical_reports' %}" class="btn btn-back">
+                    ← Back
+                </a>
+
+                <button type="submit" class="btn btn-save">
+                    💾 Save Changes
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+

@@ -26,6 +26,7 @@ import plotly.express as px
 from django.contrib.auth.mixins import LoginRequiredMixin
 from two_factor.views import LoginView
 from django.contrib.auth.decorators import permission_required
+import re
 
 
 summarizer = pipeline(
@@ -43,25 +44,39 @@ def ai_page(request):
                       'username': user.username,
                   })
 
+def clean_medical_text(text: str) -> str:
+    import re
+
+    text = re.sub(r"\s+([.,!?;:])", r"\1", text)
+
+    text = re.sub(r"([.,!?;:])([A-Za-z])", r"\1 \2", text)
+
+    text = re.sub(r",\s*or\s+", ", or ", text)
+
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+    sentences = [s.capitalize() for s in sentences if s]
+
+    return " ".join(sentences)
+
 
 def summarize_medical_text(text):
     text = text.strip().replace("\n", " ")
     input_text = "summarize: " + text  # T5-style prefix
 
     result = summarizer(
-        input_text,
-        max_new_tokens=150,
-        min_length=40,
-        num_beams=8,
-        temperature=0.6,
-        top_p=0.9,
-        repetition_penalty=2.5,
-        no_repeat_ngram_size=3,
-        do_sample=False
-    )[0]
+    input_text,
+    max_new_tokens=200,
+    min_length=90,
+    num_beams=8,
+    repetition_penalty=2.5,
+    no_repeat_ngram_size=3,
+    truncation=True
+)[0]
 
-    summary = result.get("generated_text", "").strip()
-    return summary
+    raw_summary = result.get("generated_text", "").strip()
+    clean_summary = clean_medical_text(raw_summary)
+
+    return clean_summary
 
 @csrf_exempt
 def summarize_report(request):
@@ -121,6 +136,7 @@ class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'clinic_admin.html'
     context_object_name = 'appointment'
     permission_required = 'account.view_appointment'
+    
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -140,7 +156,7 @@ class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = MedicalReport
-    paginate_by = 5
+    paginate_by = 2
     template_name = 'medical_reports.html'
     context_object_name = 'medical_reports'
     permission_required = 'account.view_medicalreport'
@@ -148,9 +164,20 @@ class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
     def get_queryset(self):
         return MedicalReport.objects.all().order_by('-created_at')
 
+
 def view_medical_report(request, report_id):
     report = get_object_or_404(MedicalReport, id=report_id)
-    return render(request, 'medical_report_detail.html', {'report': report})
+
+    if request.method == "POST":
+        report.patient_name = request.POST.get("patient_name")
+        report.age = request.POST.get("age")
+        report.report_text = request.POST.get("report_text")
+        report.summary = request.POST.get("summary")
+        report.save()
+
+        return redirect("medical_report_detail", report_id=report.id)
+
+    return render(request, "medical_report_detail.html", {"report": report})
 
 def register(request):
     if request.method == 'POST':

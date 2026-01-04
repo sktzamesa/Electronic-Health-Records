@@ -1,6 +1,163 @@
 {% extends 'admin_base.html' %}
+
 {% block content %}
- <div class="dashboard-content" id="dashboardContent">
+<style>
+/* =========================
+   ROOT VARIABLES
+========================= */
+:root {
+    --primary: #4f46e5;
+    --primary-light: #6366f1;
+    --bg: #f4f6fb;
+    --card-bg: #ffffff;
+    --text-dark: #1f2937;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 14px;
+}
+
+/* =========================
+   PAGE BASE
+========================= */
+.dashboard-content {
+    background: var(--bg);
+    min-height: 100vh;
+}
+
+
+/* =========================
+   MAIN AREA
+========================= */
+.dashboard-main {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* =========================
+   CARD
+========================= */
+.admin-dashboard-overview {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.admin-dashboard-overview h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: var(--text-dark);
+}
+
+/* =========================
+   TABLE
+========================= */
+.medical-reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.medical-reports-table thead {
+    background: #f9fafb;
+}
+
+.medical-reports-table th {
+    text-align: left;
+    padding: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+}
+
+.medical-reports-table td {
+    padding: 14px;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.medical-reports-table tbody tr:hover {
+    background: #f8faff;
+}
+
+/* =========================
+   ACTION LINK
+========================= */
+.medical-reports-table a {
+    color: var(--primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.medical-reports-table a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   CHECKBOX
+========================= */
+.medical-reports-table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 0;
+}
+/* =========================
+   PAGINATION
+========================= */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.pagination a,
+.pagination span {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    color: var(--text-dark);
+}
+
+.pagination a:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.pagination .current {
+    background: #eef2ff;
+    font-weight: 600;
+}
+
+.pagination .disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    background: #f9fafb;
+}
+
+</style>
+
+<div class="dashboard-content" id="dashboardContent">
         <header class="dashboard-header">
             <div class="dashboard-user">
                 <span>Welcome, {{username}}!</span>
@@ -11,37 +168,70 @@
                 </form>
             </div>
         </header>
-        <main class="dashboard-main">
-            <section class="admin-dashboard-overview">
-                <h2>Medical Reports</h2>
-                <table class="medical-reports-table">
-                    <thead>
-                        <tr>
-                            <th>Patient Name</th>
-                            <th>Report Type</th>
-                            <th>Date Created</th>
-                            <th>Actions</th>
-                            <th>Checkbox</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for report in medical_reports %}
-                        <tr>
-                            <td>{{ report.patient_name }}</td>
-                            <td>{{ report.report_text|truncatewords:100 }}</td>
-                            <td>{{ report.created_at|date:"M d, Y" }}</td>
-                            <td>
-                                <a href="{% url 'medical_report_detail' report.id %}">View</a>
-                            </td>
-                            <td>
-                                <input type="checkbox" name="select_report" value="{{ report.id }}">
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4">No medical reports found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </section>
-            {% endblock %}
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+        <section class="admin-dashboard-overview">
+            <h2>🩺 Medical Reports</h2>
+
+            <table class="medical-reports-table">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Report Preview</th>
+                        <th>Date Created</th>
+                        <th>Actions</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in medical_reports %}
+                    <tr>
+                        <td>{{ report.patient_name }}</td>
+                        <td>{{ report.report_text|truncatewords:20 }}</td>
+                        <td>{{ report.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'medical_report_detail' report.id %}">View</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="select_report" value="{{ report.id }}">
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            No medical reports found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_paginated %}
+<div class="pagination-container">
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% else %}
+            <span class="disabled">&laquo; First</span>
+            <span class="disabled">Previous</span>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% else %}
+            <span class="disabled">Next</span>
+            <span class="disabled">Last &raquo;</span>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+        </section>
+    </main>
+</div>
+{% endblock %}
