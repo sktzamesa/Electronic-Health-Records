@@ -117,6 +117,7 @@ def home(request):
 class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     redirect_field_name = "redirect_to"
     model = Appointment
+    MedicalReportModel = MedicalReport
     template_name = 'clinic_admin.html'
     context_object_name = 'appointment'
     permission_required = 'account.view_appointment'
@@ -132,10 +133,25 @@ class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             'confirmed_count': Appointment.objects.filter(status='confirm').count(),
             'completed_count': Appointment.objects.filter(status='completed').count(),
             'no_show_count': Appointment.objects.filter(status='no-show').count(),
-            'username': self.request.user.username
+            'username': self.request.user.username,
+            'medical_reports': MedicalReport.objects.all().count(),
         })
         return context
-    
+
+class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = MedicalReport
+    paginate_by = 5
+    template_name = 'medical_reports.html'
+    context_object_name = 'medical_reports'
+    permission_required = 'account.view_medicalreport'
+
+    def get_queryset(self):
+        return MedicalReport.objects.all().order_by('-created_at')
+
+def view_medical_report(request, report_id):
+    report = get_object_or_404(MedicalReport, id=report_id)
+    return render(request, 'medical_report_detail.html', {'report': report})
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)

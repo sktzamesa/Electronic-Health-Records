@@ -1,0 +1,47 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+ <div class="dashboard-content" id="dashboardContent">
+        <header class="dashboard-header">
+            <div class="dashboard-user">
+                <span>Welcome, {{username}}!</span>
+                <!-- Logout Form -->
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </div>
+        </header>
+        <main class="dashboard-main">
+            <section class="admin-dashboard-overview">
+                <h2>Medical Reports</h2>
+                <table class="medical-reports-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Report Type</th>
+                            <th>Date Created</th>
+                            <th>Actions</th>
+                            <th>Checkbox</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in medical_reports %}
+                        <tr>
+                            <td>{{ report.patient_name }}</td>
+                            <td>{{ report.report_text|truncatewords:100 }}</td>
+                            <td>{{ report.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'medical_report_detail' report.id %}">View</a>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="select_report" value="{{ report.id }}">
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No medical reports found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            {% endblock %}

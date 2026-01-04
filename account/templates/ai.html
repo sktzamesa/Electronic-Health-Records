@@ -247,83 +247,179 @@
 </div>
 
 <script>
-async function summarize() {
-    const name = document.getElementById("name").value.trim();
-    const age = document.getElementById("age").value;
-    const text = document.getElementById("text").value.trim();
-    const wordCount = text === "" ? 0 : text.split(/\s+/).length;
-    const textArea = document.getElementById("text");
-const wordCounter = document.getElementById("wordCounter");
-    const resultDiv = document.getElementById("result");
-    const loading = document.getElementById("loading");
+/*
+  Full script: live word counter + summary POST (Django CSRF)
+  Paste this at the bottom of your template (before </body>).
+*/
 
-    
+(function () {
+  // DOM elements
+  const textArea = document.getElementById("text");
+  const wordCounter = document.getElementById("wordCounter");
+  const resultDiv = document.getElementById("result");
+  const loading = document.getElementById("loading");
+  const submitBtn = document.querySelector(".primary-btn");
+  const nameInput = document.getElementById("name");
+  const ageInput = document.getElementById("age");
 
-    function getCookie(name) {
+  const REQUIRED_WORDS = 150;
+
+  // Utility: get cookie (Django CSRF cookie name usually 'csrftoken')
+  function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
-        for (let cookie of cookies) {
-            cookie = cookie.trim();
-            if (cookie.startsWith(name + "=")) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+      const cookies = document.cookie.split(";");
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
+      }
     }
     return cookieValue;
-}
+  }
 
-    if (wordCount < 150) {
-        resultDiv.innerHTML = `
-            <div class="error-msg">
-                ⚠️ Medical notes must contain at least <b>150 words</b>.
-            </div>
-        `;
-        return;
+  // Count words (split on whitespace, ignore empty tokens)
+  function countWords(text) {
+    if (!text) return 0;
+    return text.trim().split(/\s+/).filter(Boolean).length;
+  }
+
+  // Update UI for counter and submit button
+  function updateCounterUI() {
+    const count = countWords(textArea.value);
+    wordCounter.textContent = `${count} / ${REQUIRED_WORDS} words`;
+
+    if (count < REQUIRED_WORDS) {
+      wordCounter.style.color = "#b91c1c"; // red
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = "0.6";
+      submitBtn.style.cursor = "not-allowed";
+    } else {
+      wordCounter.style.color = "#047857"; // green
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = "1";
+      submitBtn.style.cursor = "pointer";
+    }
+  }
+
+  // Initialize UI state on page load
+  updateCounterUI();
+
+  // Live update while typing
+  textArea.addEventListener("input", updateCounterUI);
+
+  // Optionally limit maximum words (uncomment if desired)
+  // textArea.addEventListener("input", () => {
+  //   const words = textArea.value.trim().split(/\s+/);
+  //   if (words.length > 500) { // change max as needed
+  //     textArea.value = words.slice(0, 500).join(" ");
+  //   }
+  //   updateCounterUI();
+  // });
+
+  // Main submit function
+  async function summarize() {
+    // prevent double submit
+    if (submitBtn.disabled) return;
+
+    const name = nameInput.value.trim();
+    const age = ageInput.value;
+    const text = textArea.value.trim();
+    const wordCount = countWords(text);
+
+    // client-side validation
+    if (!name || !age || !text) {
+      resultDiv.innerHTML = `
+        <div class="error-msg">
+          ⚠️ Please fill out all fields.
+        </div>`;
+      return;
     }
 
-    // Show loading
+    if (wordCount < REQUIRED_WORDS) {
+      resultDiv.innerHTML = `
+        <div class="error-msg">
+          ⚠️ Medical notes must contain at least <b>${REQUIRED_WORDS} words</b>.
+        </div>`;
+      return;
+    }
+
+    // Show loading state
     loading.style.display = "inline";
     resultDiv.innerHTML = "";
 
     try {
-        const response = await fetch("/summarize/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name, age, text })
-        });
+      const csrftoken = getCookie("csrftoken") || getCookie("csrf_token") || getCookie("CSRF-TOKEN");
 
-        const data = await response.json();
+      const response = await fetch("/summarize/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // include CSRF token for Django
+          "X-CSRFToken": csrftoken || ""
+        },
+        body: JSON.stringify({ name, age, text })
+      });
 
-        if (data.error) {
-            resultDiv.innerHTML = `
-                <div class="error-msg">
-                    ⚠️ ${data.error}
-                </div>
-            `;
+      // If server responded with non-JSON, throw helpful error
+      const contentType = response.headers.get("content-type") || "";
+      if (!response.ok) {
+        let errMsg = `Server returned ${response.status}`;
+        if (contentType.includes("application/json")) {
+          const errJson = await response.json().catch(()=>null);
+          if (errJson && errJson.error) errMsg = errJson.error;
         } else {
-            resultDiv.innerHTML = `
-                <div class="summary-box">
-                    <strong>Summary:</strong>
-                    <p>${data.summary}</p>
-                </div>
-                <p class="success-msg">✔️ ${data.message}</p>
-            `;
+          const textBody = await response.text().catch(()=>null);
+          if (textBody) errMsg = textBody;
         }
-    } catch (error) {
+        throw new Error(errMsg);
+      }
+
+      // Parse JSON success response
+      const data = contentType.includes("application/json") ? await response.json() : { summary: await response.text() };
+
+      if (data.error) {
         resultDiv.innerHTML = `
-            <div class="error-msg">
-                ⚠️ ${error.message}
-            </div>
+          <div class="error-msg">
+            ⚠️ ${data.error}
+          </div>
         `;
+      } else {
+        const summaryHtml = data.summary ? `<p>${data.summary}</p>` : `<p>No summary returned.</p>`;
+        resultDiv.innerHTML = `
+          <div class="summary-box">
+            <strong>Summary:</strong>
+            ${summaryHtml}
+          </div>
+          <p class="success-msg">✔️ ${data.message || "Summary generated."}</p>
+        `;
+      }
+    } catch (error) {
+      console.error("Summarize error:", error);
+      resultDiv.innerHTML = `
+        <div class="error-msg">
+          ⚠️ ${error.message || "An error occurred while generating the summary."}
+        </div>
+      `;
     } finally {
-        // Always hide loading
-        loading.style.display = "none";
+      loading.style.display = "none";
     }
-}
+  }
+
+  // Wire up the button (the button in your template calls summarize(), but we also attach here)
+  submitBtn.addEventListener("click", summarize);
+
+  // Also handle form Enter-key submit: prevent default and call summarize
+  const form = document.getElementById("summaryForm");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      summarize();
+    });
+  }
+})();
 </script>
 
 

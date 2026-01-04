@@ -63,6 +63,15 @@
     <div class="stat-value">{{ no_show_count }}</div>
 </div>
 
+<div class="admin-stat-card">
+    <div style="display: flex; gap: 1rem; justify-content: space-between;">
+        <h3>MEDICAL NOTES</h3>
+        <a href="{% url 'medical_reports' %}"class="see-details-btn">See Details</a>
+    </div>
+    <div class="stat-value">{{ medical_reports }}</div>
+</div>
+
+
                 </div>
             </section>
         </main>

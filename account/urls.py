@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import clinicadmin,CustomLoginView
+from .views import clinicadmin,CustomLoginView,MedicalReportListView
 
 urlpatterns = [
     path('register/', views.register, name='register'),
@@ -24,4 +24,6 @@ urlpatterns = [
     path("summarize/", views.summarize_report, name="summarize_report"),
     path("ai/", views.ai_page, name="ai_page"),
     path('account/login/', CustomLoginView.as_view(), name='login'),
+    path('medical-reports/', views.MedicalReportListView.as_view(), name='medical_reports'),
+    path('medical-reports/<int:report_id>/', views.view_medical_report, name='medical_report_detail'),
 ]
