@@ -18,11 +18,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
-from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.http import JsonResponse
 from transformers import pipeline
 import plotly.express as px
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -39,7 +37,11 @@ summarizer = pipeline(
 @permission_required('account.view_medicalreport', raise_exception=True)
 @login_required
 def ai_page(request):
-    return render(request, "ai.html")
+    user = request.user
+    return render(request, "ai.html",
+                  {
+                      'username': user.username,
+                  })
 
 
 def summarize_medical_text(text):
@@ -118,7 +120,7 @@ class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'clinic_admin.html'
     context_object_name = 'appointment'
     permission_required = 'account.view_appointment'
-
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = now().date()
@@ -130,6 +132,7 @@ class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             'confirmed_count': Appointment.objects.filter(status='confirm').count(),
             'completed_count': Appointment.objects.filter(status='completed').count(),
             'no_show_count': Appointment.objects.filter(status='no-show').count(),
+            'username': self.request.user.username
         })
         return context
     

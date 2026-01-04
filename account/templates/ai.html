@@ -1,62 +1,330 @@
 {% extends 'admin_base.html' %}
 
-{% block title %} Clinic Admin Dashboard {% endblock %}
+{% block title %}Clinic Admin Dashboard{% endblock %}
 
-    {% block content %}
+{% block content %}
 <div class="dashboard-content" id="dashboardContent">
-        <header class="dashboard-header">
-            <div class="dashboard-user">
-                <span>AI Medical Summarizer</span>
-                <!-- Logout Form -->
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-btn">Logout</button>
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+        <div class="dashboard-user">
+            <span class="app-title">Welcome, {{username}}!</span>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+      <style>
+/* =========================
+   HEADER
+========================= */
+.dashboard-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+.dashboard-main {
+    max-width: 1200px; /* wider = less thin */
+    margin: auto;
+    padding-top: 10px;
+}
+
+.admin-dashboard-title {
+    margin-bottom: 24px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #064e3b;
+}
+
+/* =========================
+   CARD (MAIN CONTAINER)
+========================= */
+.card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 40px 44px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.08),
+        0 4px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid #d1fae5;
+}
+
+.card-title {
+    margin-bottom: 22px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #047857;
+}
+
+/* =========================
+   FORM LAYOUT
+========================= */
+.summary-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+/* =========================
+   INPUTS & TEXTAREA
+========================= */
+.summary-form input,
+.summary-form textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #a7f3d0;
+    font-size: 15px;
+    line-height: 1.6;
+    background: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.summary-form input {
+    height: 54px;
+}
+
+.summary-form textarea {
+    min-height: 200px; /* medical notes feel */
+    resize: vertical;
+}
+
+.summary-form input:focus,
+.summary-form textarea:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+}
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+.primary-btn {
+    background: linear-gradient(135deg, #059669, #047857);
+    color: #ffffff;
+    padding: 14px 28px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: fit-content;
+    box-shadow: 0 10px 22px rgba(5, 150, 105, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba(5, 150, 105, 0.45);
+}
+
+/* =========================
+   RESULT SECTION
+========================= */
+.result-box {
+    margin-top: 30px;
+}
+
+.result-box strong {
+    font-size: 15px;
+    color: #064e3b;
+}
+
+.result-output {
+    margin-top: 12px;
+}
+
+/* =========================
+   SUMMARY OUTPUT
+========================= */
+.summary-box {
+    background: #f0fdf4;
+    border-left: 6px solid #059669;
+    padding: 18px 20px;
+    border-radius: 10px;
+    color: #064e3b;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* =========================
+   STATUS MESSAGES
+========================= */
+.success-msg {
+    color: #047857;
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+.error-msg {
+    color: #b91c1c;
+    background: #fef2f2;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* =========================
+   LOADING INDICATOR
+========================= */
+.loading-spinner {
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #059669;
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+</style>
+    </header>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+
+        <section class="admin-dashboard-overview">
+            <h2 class="admin-dashboard-title">Welcome to AI Medical Summarizer 👋</h2>
+
+            <div class="card">
+                <h3 class="card-title">Patient Medical Summary</h3>
+
+                <form id="summaryForm" class="summary-form" onsubmit="return false;">
+                    <div class="form-row">
+                        <input type="text" id="name" placeholder="Patient Name" required>
+                        <input type="number" id="age" placeholder="Age" required>
+                    </div>
+
+                    <textarea id="text" placeholder="Enter medical notes..." required></textarea>
+                    <div id="wordCounter" style="
+    text-align: right;
+    font-size: 14px;
+    font-weight: 500;
+    color: #b91c1c;
+">
+    0 / 150 words
+</div>
+                    <button type="button" class="primary-btn" onclick="summarize()">
+                        Generate Summary
+                    </button>
                 </form>
+
+                <div class="result-box">
+    <p>
+        <strong>Result:</strong>
+        <span id="loading" class="loading-spinner" style="display:none;">
+            ⏳ Generating...
+        </span>
+    </p>
+    <div id="result" class="result-output"></div>
+</div>
+
+                
             </div>
-        </header>
+        </section>
 
-        <main class="dashboard-main">
-            <section class="admin-dashboard-overview">
-                <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
-                                <div class="admin-stats-row">
-
-<form id="summaryForm" onsubmit="return false;"> 
-  <input type="text" id="name" placeholder="Patient Name" required>
-  <input type="number" id="age" placeholder="Age" required>
-  <textarea id="text" placeholder="Enter medical notes..." required></textarea>
-  <button type="button" onclick="summarize()">Summarize</button>
-</form>
-
-<p><b>Result:</b> <span id="result"></span></p>
+    </main>
+</div>
 
 <script>
 async function summarize() {
-  const name = document.getElementById("name").value;
-  const age = document.getElementById("age").value;
-  const text = document.getElementById("text").value;
+    const name = document.getElementById("name").value.trim();
+    const age = document.getElementById("age").value;
+    const text = document.getElementById("text").value.trim();
+    const wordCount = text === "" ? 0 : text.split(/\s+/).length;
+    const textArea = document.getElementById("text");
+const wordCounter = document.getElementById("wordCounter");
+    const resultDiv = document.getElementById("result");
+    const loading = document.getElementById("loading");
 
-  try {
-    const response = await fetch("/summarize/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, age, text })
-    });
+    
 
-    const data = await response.json();
-
-    if (data.error) {
-      document.getElementById("result").textContent = "⚠️ " + data.error;
-    } else {
-      document.getElementById("result").innerHTML = `
-        <div style="border:1px solid #ccc; padding:10px; border-radius:6px; margin-top:10px;">
-          <strong>Summary:</strong><br>${data.summary}
-        </div>
-        <p style="color:green;">✔️ ${data.message}</p>
-      `;
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
     }
-  } catch (error) {
-    document.getElementById("result").textContent = "⚠️ Error: " + error.message;
-  }
+    return cookieValue;
+}
+
+    if (wordCount < 150) {
+        resultDiv.innerHTML = `
+            <div class="error-msg">
+                ⚠️ Medical notes must contain at least <b>150 words</b>.
+            </div>
+        `;
+        return;
+    }
+
+    // Show loading
+    loading.style.display = "inline";
+    resultDiv.innerHTML = "";
+
+    try {
+        const response = await fetch("/summarize/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, age, text })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            resultDiv.innerHTML = `
+                <div class="error-msg">
+                    ⚠️ ${data.error}
+                </div>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <div class="summary-box">
+                    <strong>Summary:</strong>
+                    <p>${data.summary}</p>
+                </div>
+                <p class="success-msg">✔️ ${data.message}</p>
+            `;
+        }
+    } catch (error) {
+        resultDiv.innerHTML = `
+            <div class="error-msg">
+                ⚠️ ${error.message}
+            </div>
+        `;
+    } finally {
+        // Always hide loading
+        loading.style.display = "none";
+    }
 }
 </script>
+
+
 {% endblock %}

@@ -1,92 +1,210 @@
-{% extends "two_factor/_base_focus.html" %}
+{% load static %}
 {% load i18n %}
 {% load two_factor_tags %}
 {% load widget_tweaks %}
 
 {% block content %}
-<!-- Optional test banner -->
-<!-- <div style="background: yellow; padding: 6px; text-align:center;">CUSTOM TEMPLATE OVERRIDE IS ACTIVE</div> -->
-
-<!-- ✅ Include Bootstrap directly here -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-  body {
-    background-color: #f5f7fb;
-    font-family: 'Inter', sans-serif;
+/* =========================
+   RESET BASE TEMPLATE EFFECT
+========================= */
+.register-section,
+.register-flex {
+  width: 100%;
+  min-height: 100vh;
+  display: block !important;
+}
+
+/* =========================
+   PAGE BASE
+========================= */
+html, body {
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background: #f5f7fb;
+  font-family: 'Inter', sans-serif;
+}
+
+/* =========================
+   WRAPPER
+========================= */
+.auth-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* =========================
+   CARD
+========================= */
+.auth-card {
+  width: 1200px;
+  max-width: 100%;
+  min-height: 690px;
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 40px 80px rgba(0,0,0,.12);
+  display: flex;
+  overflow: hidden;
+}
+
+/* =========================
+   LEFT PANEL (IMAGE)
+========================= */
+.auth-left {
+  width: 50%;
+  background-image: url("{% static 'img/hospital.jpg' %}");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+/* Dark overlay for readability */
+.auth-left::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Text above overlay */
+.auth-left h1 {
+  position: relative;
+  color: #ffffff;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+.auth-right {
+  width: 50%;
+  padding: 70px 60px;
+}
+
+.auth-right h2 {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.auth-right p {
+  color: #6c757d;
+  margin-bottom: 30px;
+}
+
+/* =========================
+   FORM
+========================= */
+.form-control {
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.btn-primary {
+  border-radius: 12px;
+  padding: 12px;
+  background: #8b5cf6;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #7c3aed;
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  .auth-card {
+    flex-direction: column;
+    min-height: auto;
   }
-  .login-card {
-    max-width: 420px;
-    margin: 60px auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    padding: 40px 35px;
+
+  .auth-left,
+  .auth-right {
+    width: 100%;
   }
-  .login-card h1 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 0.5rem;
+
+  .auth-left {
+    min-height: 260px;
+    padding: 30px 20px;
   }
-  .login-card p {
-    text-align: center;
-    color: #6c757d;
+
+  .auth-left h1 {
+    font-size: 32px;
   }
-  .form-control {
-    border-radius: 10px;
+
+  .auth-right {
+    padding: 40px 25px;
   }
-  .btn-primary, .btn-secondary {
-    border-radius: 10px;
-  }
+}
 </style>
 
-<div class="login-card">
-  <h1>{% trans "Login" %}</h1>
+<div class="auth-wrapper">
+  <div class="auth-card">
 
-  {% if wizard.steps.current == 'auth' %}
-    <p>{% blocktrans %}Enter your credentials.{% endblocktrans %}</p>
-  {% elif wizard.steps.current == 'token' %}
-    <p>{{ device|as_verbose_action }}</p>
-  {% elif wizard.steps.current == 'backup' %}
-    <p>{% blocktrans trimmed %}
-      Use this form for entering backup tokens for logging in.
-      These tokens have been generated for you to print and keep safe.
-      Please enter one of these backup tokens to login to your account.
-    {% endblocktrans %}</p>
-  {% endif %}
-
-  <form action="" method="post" novalidate>
-    {% csrf_token %}
-    {% include "two_factor/_wizard_forms.html" %}
-    <input type="submit" value="" hidden />
-
-    {% if other_devices %}
-      <hr>
-      <p class="text-center text-muted small">{% trans "Or use one of your other authentication methods:" %}</p>
-      <div class="d-grid gap-2">
-        {% for other in other_devices %}
-          <button name="challenge_device" value="{{ other.persistent_id }}"
-                  class="btn btn-outline-secondary" type="submit">
-            {{ other|as_action }}
-          </button>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    {% include "two_factor/_wizard_actions.html" %}
-  </form>
-
-  {% if backup_tokens %}
-    <hr>
-    <div class="backup_tokens_form text-center">
-      <form action="" method="post">
-        {% csrf_token %}
-        <p class="text-muted small">{% trans "As a last resort, you can use a backup token:" %}</p>
-        <button name="wizard_goto_step" type="submit" value="backup"
-                class="btn btn-sm btn-secondary w-100">{% trans "Use Backup Token" %}</button>
-      </form>
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+      <h1>Smart Hospital Management System</h1>
     </div>
-  {% endif %}
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-right">
+      <h2>{% trans "Login" %}</h2>
+      <p>{% trans "Please login to your account." %}</p>
+
+      <form action="" method="post" novalidate>
+        {% csrf_token %}
+        {% include "two_factor/_wizard_forms.html" %}
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">
+          {% trans "Login" %}
+        </button>
+
+        {% if other_devices %}
+          <hr class="my-4">
+          <p class="text-muted small text-center">
+            {% trans "Or use another authentication method" %}
+          </p>
+          {% for other in other_devices %}
+            <button name="challenge_device"
+                    value="{{ other.persistent_id }}"
+                    class="btn btn-outline-secondary w-100 mb-2">
+              {{ other|as_action }}
+            </button>
+          {% endfor %}
+        {% endif %}
+      </form>
+
+      {% if backup_tokens %}
+        <hr>
+        <form action="" method="post">
+          {% csrf_token %}
+          <button name="wizard_goto_step"
+                  value="backup"
+                  class="btn btn-outline-secondary w-100">
+            {% trans "Use Backup Token" %}
+          </button>
+        </form>
+      {% endif %}
+      Don't have an account yet? <a href="{% url 'register' %}">Register here</a>
+    </div>
+
+  </div>
 </div>
 {% endblock %}

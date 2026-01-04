@@ -7,7 +7,7 @@
     <div class="dashboard-content" id="dashboardContent">
         <header class="dashboard-header">
             <div class="dashboard-user">
-                <span>Welcome Admin!</span>
+                <span>Welcome, {{username}}!</span>
                 <!-- Logout Form -->
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
@@ -18,7 +18,6 @@
 
         <main class="dashboard-main">
             <section class="admin-dashboard-overview">
-                <h2 class="admin-dashboard-title">Welcome back, Admin!</h2>
                                 <div class="admin-stats-row">
 <div class="admin-stat-card">
     <h3>Total Patients</h3>

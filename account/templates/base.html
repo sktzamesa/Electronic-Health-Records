@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LE Dental Clinic - Book Appointment</title>
+    <title>Hospital Management System</title>
     <!-- Flatpickr Calendar CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- Custom Styles -->
@@ -15,19 +15,15 @@
     <!-- ===== Sidebar Navigation ===== -->
     <aside class="sidebar collapsed" id="sidebar">
         <div class="sidebar-header">
-            <span class="ehr-logo">LE Dental Clinic</span>
+            <span class="ehr-logo">Hospital Management System</span>
             <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
                 <span id="sidebarToggleIcon">&#9776;</span>
             </button>
         </div>
         <nav class="sidebar-nav">
-            <a href="{% url 'dashboard' %}" class="sidebar-link active"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
+            <a href="{% url 'dashboard' %}" class="sidebar-link"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
             <a href="{% url 'appointment' %}" class="sidebar-link"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
             <a href="{% url 'profile' %}" class="sidebar-link"><span>👤</span> <span class="sidebar-text">Profile</span></a>
-            {% if user.is_staff or user.is_superuser %}
-            <a href="{% url 'ai_page' %}" class="sidebar-link"><span>🤖</span> <span class="sidebar-text">AI Assistant</span></a>
-            {% else %}
-            {% endif %}
         </nav>
     </aside>
 
