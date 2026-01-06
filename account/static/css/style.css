@@ -29,7 +29,7 @@
 
 .ehr-logo {
     background: #fff;
-    color: rgb(0, 161, 93);
+    color: rgb(184, 36, 164);
     padding: 0.2em 0.6em;
     border-radius: 6px;
     margin-right: 0.7em;
@@ -93,17 +93,17 @@
 
 .login-btn:hover {
     background: #fff;
-    color: rgb(0, 161, 93);
+    color: rgb(140, 26, 163);
 }
 
 .signup-btn {
     background: #fff;
-    color: rgb(0, 161, 93);
+    color: rgb(140, 26, 163);
     border: none;
 }
 
 .signup-btn:hover {
-    background: rgb(0, 161, 93);
+    background: rgb(140, 26, 163);
     color: #ffffff;
     border: 1px solid #fff;
 }
@@ -168,7 +168,7 @@
 
 .welcome-container h1 {
     font-size: 2.3rem;
-    color:rgb(0, 161, 93);
+    color:rgb(140, 26, 163);
     margin-bottom: 1rem;
     font-weight: 700;
 }
@@ -186,7 +186,7 @@
 }
 
 .welcome-features li {
-    color: rgb(0, 161, 93);
+    color: rgb(140, 26, 163);
     font-size: 1rem;
     margin-bottom: 0.5rem;
     display: flex;
@@ -195,7 +195,7 @@
 }
 
 .cta-btn {
-    background: rgb(0, 161, 93);
+    background: rgb(140, 26, 163);
     color: #fff;
     padding: 0.7em 2em;
     border-radius: 6px;
@@ -207,7 +207,7 @@
 }
 
 .cta-btn:hover {
-    background: rgb(1, 131, 77);
+    background: rgb(131, 29, 156);
 }
 
 .welcome-image {
@@ -252,7 +252,7 @@
 }
 
 .about_content h2 {
-    color: rgb(0, 161, 93);
+    color: rgb(140, 26, 163);
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: 700;
@@ -342,7 +342,7 @@
 }
 
 .services_content h2 {
-    color: rgb(0, 161, 93);
+    color: rgb(140, 26, 163);
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: 700;
@@ -442,7 +442,7 @@
 }
 
 .contact_content h2 {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: 700;
@@ -528,7 +528,7 @@
 }
 
 .contact-btn {
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     color: #fff;
     padding: 0.7em 2em;
     border-radius: 6px;
@@ -551,7 +551,7 @@
 }
 
 .contact-details strong {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
 }
 
 /* Responsive for contact section */
@@ -606,7 +606,7 @@
 }
 
 .login-message h2 {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: 700;
@@ -647,12 +647,12 @@
     align-items: center;
     font-size: 1.7rem;
     font-weight: bold;
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     margin-bottom: 2rem;
 }
 
 .login-logo .ehr-logo {
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     color: #fff;
     padding: 0.2em 0.6em;
     border-radius: 6px;
@@ -663,7 +663,7 @@
 
 .login-title {
     font-size: 1.3rem;
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     margin-bottom: 1.5rem;
     font-weight: 600;
     text-align: center;
@@ -683,14 +683,14 @@
 }
 
 .login-form label {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     font-weight: 500;
     margin-bottom: 0.2rem;
 }
 
 .login-form input {
     padding: 0.7em 1em;
-    border: 1px solid rgb(0, 161, 93);
+    border: 1px solid rgb(131, 29, 156);
     border-radius: 6px;
     font-size: 1rem;
     background: #f6f8fb;
@@ -699,12 +699,12 @@
 }
 
 .login-form input:focus {
-    border: 1.5px solid rgb(0, 161, 93);
+    border: 1.5px solid rgb(131, 29, 156);
     outline: none;
 }
 
 .login-btn-form {
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     color: #fff;
     padding: 0.7em 2em;
     border-radius: 6px;
@@ -717,7 +717,7 @@
 }
 
 .login-btn-form:hover {
-    background:rgb(3, 131, 77);
+    background:rgb(131, 29, 156);
 }
 
 .login-links {
@@ -727,7 +727,7 @@
 }
 
 .login-links a {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     text-decoration: underline;
     margin: 0 0.5em;
     transition: color 0.2s;
@@ -803,7 +803,7 @@
 }
 
 .register-message h2 {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     font-size: 2rem;
     margin-bottom: 1rem;
     font-weight: 700;
@@ -847,12 +847,12 @@
     align-items: center;
     font-size: 1.7rem;
     font-weight: bold;
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     margin-bottom: 2rem;
 }
 
 .register-logo .ehr-logo {
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     color: #fff;
     padding: 0.2em 0.6em;
     border-radius: 6px;
@@ -863,7 +863,7 @@
 
 .register-title {
     font-size: 1.3rem;
-    color: rgb(0, 161, 93);
+    color: rgb(124, 24, 116);
     margin-bottom: 1.5rem;
     font-weight: 600;
     text-align: center;
@@ -878,7 +878,7 @@
 
 .register-form .form-control {
     padding: 0.7em 1em;
-    border: 1px solid rgb(0, 161, 93);
+    border: 1px solid rgb(131, 29, 156);
     border-radius: 6px;
     font-size: 1rem;
     background: #f6f8fb;
@@ -887,20 +887,20 @@
 }
 
 .register-form .form-control:focus {
-    border: 1.5px solid rgb(0, 161, 93);
+    border: 1.5px solid rgb(131, 29, 156);
     outline: none;
 }
 
 
 .register-form label {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     font-weight: 500;
     margin-bottom: 0.2rem;
 }
 
 .register-form input {
     padding: 0.7em 1em;
-    border: 1px solid rgb(0, 161, 93);
+    border: 1px solid rgb(131, 29, 156);
     border-radius: 6px;
     font-size: 1rem;
     background: #f6f8fb;
@@ -909,12 +909,12 @@
 }
 
 .register-form input:focus {
-    border: 1.5px solid rgb(0, 161, 93);
+    border: 1.5px solid rgb(131, 29, 156);
     outline: none;
 }
 
 .register-btn-form {
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     color: #fff;
     padding: 0.7em 2em;
     border-radius: 6px;
@@ -927,7 +927,7 @@
 }
 
 .register-btn-form:hover {
-    background: rgb(3, 131, 77);
+    background: rgb(131, 29, 156);
 }
 
 .register-links {

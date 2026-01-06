@@ -156,13 +156,15 @@ class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = MedicalReport
-    paginate_by = 2
+    paginate_by = 5
     template_name = 'medical_reports.html'
     context_object_name = 'medical_reports'
     permission_required = 'account.view_medicalreport'
 
     def get_queryset(self):
         return MedicalReport.objects.all().order_by('-created_at')
+
+
 
 
 def view_medical_report(request, report_id):
@@ -175,7 +177,8 @@ def view_medical_report(request, report_id):
         report.summary = request.POST.get("summary")
         report.save()
 
-        return redirect("medical_report_detail", report_id=report.id)
+        messages.success(request, "Medical report saved successfully!")
+        return redirect("medical_reports")
 
     return render(request, "medical_report_detail.html", {"report": report})
 

@@ -234,4 +234,15 @@
         </section>
     </main>
 </div>
+
+{% if messages %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    {% for message in messages %}
+      alert("{{ message }}");
+    {% endfor %}
+  });
+</script>
+{% endif %}
+
 {% endblock %}

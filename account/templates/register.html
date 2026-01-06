@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EHR System - Register</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        
+    </style>
 </head>
 <body>
     <!-- Landing Page Navbar -->
     <nav class="navbar">
         <div class="navbar-logo">
-            <span class="ehr-logo">LE Dental Clinic</span>
+            <span class="ehr-logo">PrimeHealth General Hospital</span>
         </div>
         <ul class="navbar-links">
             <li><a href="{% url 'home' %}">Home</a></li>
@@ -31,20 +34,17 @@
             <div class="register-message">
                 <h2>Join Our Patient Portal!</h2>
                 <p>
-                    Create your account to access your health records, manage appointments, and connect with your care team—all in one secure place.<br><br>
-                    Registration is quick, easy, and secure.
+                    Sign up for the PrimeHealth Patient Portal to manage appointments, access health information, and stay connected with your medical team anytime, anywhere.
+
+Simple. Secure. Designed for you.
                 </p>
-                <img src="https://thumbs.dreamstime.com/b/cute-cartoon-dentist-brush-tooth-doctor-great-health-dental-care-concept-79369684.jpg" alt="EHR Register" />
+                <img src="https://tse1.mm.bing.net/th/id/OIP.NKbugN-flCd9oQGcfqOROgHaE8?pid=Api&P=0&h=180" alt="EHR Register" />
             </div>
             <div class="register-container">
-                <div class="register-logo">
-                    <span class="ehr-logo">EHR</span> Patient Portal
-                </div>
-                <h2 class="register-title">Create your account</h2>
+                <h1 class="register-title">Create your account</h1>
 
                 <form method="post" class="register-form">
                     {% csrf_token %}
-
                     {% for field in form %}
     <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>

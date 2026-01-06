@@ -4,135 +4,235 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* =========================
-   RESET BASE TEMPLATE EFFECT
-========================= */
-.register-section,
-.register-flex {
-  width: 100%;
-  min-height: 100vh;
-  display: block !important;
+/* ===================== ROOT ===================== */
+:root {
+  --primary: #7c3aed;
+  --primary-dark: #6d28d9;
+  --primary-soft: rgba(124, 58, 237, 0.18);
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --radius: 18px;
+  --shadow: 0 30px 60px rgba(16, 24, 40, 0.08);
 }
 
-/* =========================
-   PAGE BASE
-========================= */
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
-  width: 100%;
-  overflow-x: hidden;
-  background: #f5f7fb;
-  font-family: 'Inter', sans-serif;
+  height: 100%;
+  font-family: 'Inter', system-ui, Arial, sans-serif;
+  background: var(--bg);
+  color: #0f1724;
 }
 
-/* =========================
-   WRAPPER
-========================= */
+/* ===================== NAVBAR ===================== */
+.navbar {
+  background: var(--primary);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px; /* FIXED HEIGHT */
+}
+
+.navbar-logo .ehr-logo {
+  background: #ffffff;
+  color: var(--primary);
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.25);
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.login-btn {
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.signup-btn {
+  background: #ffffff;
+  color: var(--primary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ===================== AUTH LAYOUT ===================== */
 .auth-wrapper {
-  width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 64px); /* MATCH NAVBAR HEIGHT */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 24px; /* REDUCED */
 }
 
-/* =========================
-   CARD
-========================= */
+/* ===================== CARD ===================== */
 .auth-card {
-  width: 1200px;
-  max-width: 100%;
-  min-height: 690px;
-  background: #ffffff;
-  border-radius: 22px;
-  box-shadow: 0 40px 80px rgba(0,0,0,.12);
+  width: 100%;
+  max-width: 1200px;
+  background: var(--card);
+  border-radius: var(--radius);
   display: flex;
   overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
-/* =========================
-   LEFT PANEL (IMAGE)
-========================= */
+/* ===================== LEFT PANEL ===================== */
 .auth-left {
-  width: 50%;
-  background-image: url("{% static 'img/hospital.jpg' %}");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  width: 55%;
+  background: url("{% static 'img/hospital.jpg' %}") center / cover no-repeat;
   position: relative;
-
+  padding: 48px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 60px;
+  align-items: center;     /* PERFECT CENTER */
+  justify-content: center; /* PERFECT CENTER */
 }
 
-/* Dark overlay for readability */
 .auth-left::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.2)
+  );
 }
 
-/* Text above overlay */
-.auth-left h1 {
+.auth-left .hero-text {
   position: relative;
+  z-index: 2;
   color: #ffffff;
-  font-size: 44px;
-  font-weight: 700;
-  line-height: 1.2;
-  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.15;
+  max-width: 420px;
+  text-align: left;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* =========================
-   RIGHT PANEL
-========================= */
-.auth-right {
-  width: 50%;
-  padding: 70px 60px;
-}
-
-.auth-right h2 {
+.auth-left .hero-sub {
+  display: block;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-top: 12px;
 }
 
-.auth-right p {
-  color: #6c757d;
-  margin-bottom: 30px;
+/* ===================== RIGHT PANEL ===================== */
+.auth-right {
+  width: 45%;
+  padding: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* =========================
-   FORM
-========================= */
+.form-wrap {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ===================== HEADINGS ===================== */
+.form-wrap h2 {
+  margin: 0 0 6px;
+  color: var(--primary);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.form-wrap p {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ===================== FORM CONTROLS ===================== */
+.form-group {
+  margin-bottom: 18px;
+}
+
 .form-control {
+  width: 100%;
+  padding: 14px 16px;
+  min-height: 52px;
   border-radius: 12px;
-  padding: 12px 14px;
+  border: 1px solid #e6e9ef;
+  background: #fbfdff;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 14px 40px var(--primary-soft);
+}
+
+/* ===================== BUTTON ===================== */
 .btn-primary {
-  border-radius: 12px;
-  padding: 12px;
-  background: #8b5cf6;
+  width: 100%;
+  padding: 14px 18px;
+  min-height: 52px;
+  background: var(--primary);
   border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 18px 36px rgba(124, 58, 237, 0.32);
+  cursor: pointer;
 }
 
 .btn-primary:hover {
-  background: #7c3aed;
+  background: var(--primary-dark);
 }
 
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 768px) {
+/* ===================== HELP LINKS ===================== */
+.helper {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.helper a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 900px) {
   .auth-card {
     flex-direction: column;
-    min-height: auto;
   }
 
   .auth-left,
@@ -141,70 +241,80 @@ html, body {
   }
 
   .auth-left {
-    min-height: 260px;
-    padding: 30px 20px;
+    min-height: 240px;
+    padding: 28px;
   }
 
-  .auth-left h1 {
-    font-size: 32px;
+  .auth-left .hero-text {
+    font-size: 26px;
+    text-align: center;
   }
 
   .auth-right {
-    padding: 40px 25px;
+    padding: 32px;
+  }
+
+  .form-wrap {
+    max-width: 100%;
   }
 }
 </style>
 
+
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar">
+  <div class="navbar-logo">
+    <span class="ehr-logo">PrimeHealth General Hospital</span>
+  </div>
+
+  <ul class="navbar-links">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact Us</a></li>
+  </ul>
+
+  <div class="navbar-actions">
+    <a href="{% url 'two_factor:login' %}" class="login-btn">Login</a>
+    <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
+  </div>
+</nav>
+
+<!-- ===================== LOGIN CARD ===================== -->
 <div class="auth-wrapper">
   <div class="auth-card">
 
-    <!-- LEFT PANEL -->
     <div class="auth-left">
-      <h1>Smart Hospital Management System</h1>
+      <div class="hero-text">
+        Smart Hospital<br>
+        Management System
+        <span class="hero-sub">Secure · Connected · Patient-First</span>
+      </div>
     </div>
 
-    <!-- RIGHT PANEL -->
     <div class="auth-right">
-      <h2>{% trans "Login" %}</h2>
-      <p>{% trans "Please login to your account." %}</p>
-
-      <form action="" method="post" novalidate>
-        {% csrf_token %}
-        {% include "two_factor/_wizard_forms.html" %}
-
-        <button type="submit" class="btn btn-primary w-100 mt-3">
-          {% trans "Login" %}
-        </button>
-
-        {% if other_devices %}
-          <hr class="my-4">
-          <p class="text-muted small text-center">
-            {% trans "Or use another authentication method" %}
-          </p>
-          {% for other in other_devices %}
-            <button name="challenge_device"
-                    value="{{ other.persistent_id }}"
-                    class="btn btn-outline-secondary w-100 mb-2">
-              {{ other|as_action }}
-            </button>
-          {% endfor %}
-        {% endif %}
-      </form>
-
-      {% if backup_tokens %}
-        <hr>
-        <form action="" method="post">
+      <div class="form-wrap">
+        <h2>{% trans "Login" %}</h2>
+        <p>{% trans "Please login to your account." %}</p>
+        <br></br>
+        <form method="post" novalidate>
           {% csrf_token %}
-          <button name="wizard_goto_step"
-                  value="backup"
-                  class="btn btn-outline-secondary w-100">
-            {% trans "Use Backup Token" %}
+          {% include "two_factor/_wizard_forms.html" %}
+            <br></br>
+          <button type="submit" class="btn-primary mt-2">
+            {% trans "Login" %}
           </button>
         </form>
-      {% endif %}
-      Don't have an account yet? <a href="{% url 'register' %}">Register here</a>
+
+        <p class="helper">
+          Don’t have an account yet?
+          <a href="{% url 'register' %}">Register here</a>
+        </p>
+      </div>
     </div>
 
   </div>
 </div>
+
 {% endblock %}

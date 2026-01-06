@@ -31,7 +31,7 @@ body {
     padding: 1.2rem 1rem 1.2rem 1.2rem;
 }
 .ehr-logo {
-    background: rgb(0, 161, 93);
+    background: rgb(122, 29, 165);
     color: #fff;
     padding: 0.2em 0.6em;
     border-radius: 6px;
@@ -69,8 +69,8 @@ body {
 }
 .sidebar-link.active,
 .sidebar-link:hover {
-    background: rgba(0,161,93,0.08);
-    color: rgb(0,161,93);
+    background: rgba(132, 13, 143, 0.08);
+    color: rgb(131, 29, 156);
 }
 
 /* Make active/hover span full width when collapsed */
@@ -126,7 +126,7 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background: rgb(0, 161, 93);
+    background: rgb(155, 24, 155);
     height: 64px;
     padding: 0 2rem;
     box-shadow: 0 2px 12px rgba(26, 53, 92, 0.06);
@@ -141,7 +141,7 @@ body {
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgb(0, 161, 93);
+    border: 2px solid rgb(175, 33, 152);
 }
 .dashboard-user span {
     font-weight: 500;
@@ -171,7 +171,7 @@ body {
 }
 .logout-btn:hover {
     background: rgb(255, 255, 255);
-    color: rgb(0, 161, 93);
+    color: rgb(165, 38, 165);
 }
 /* Remove the extra padding when sidebar is collapsed */
 .sidebar.collapsed ~ .dashboard-content .dashboard-main {
@@ -262,7 +262,7 @@ body {
 
 .admin-table td .profile-action-btn:hover,
 .admin-table td .profile-action-btn:focus {
-    background: #059669;
+    background: #921788;
     box-shadow: 0 4px 16px rgba(16,185,129,0.15);
 }
 .dashboard-table {
@@ -324,7 +324,7 @@ body {
 
 /* Green for pending */
 .pending-appointments.status-pending .section-header .section-title {
-    border-left-color: #28a745;
+    border-left-color: #8f27af;
 }
 
 /* Purple for confirmed */
@@ -385,12 +385,12 @@ body {
 }
 
 .action-btn.confirm {
-    background-color: #28a745;
+    background-color: #711883;
     color: #fff;
 }
 
 .action-btn.confirm:hover {
-    background-color: #218838;
+    background-color: #741786;
 }
 
 .action-btn.cancel {
@@ -410,11 +410,11 @@ body {
 }
 /* Completed - Green */
 .action-btn.complete {
-  background-color: #4CAF50; /* Success green */
+  background-color: #7a1b7e; /* Success green */
   color: white;
 }
 .action-btn.complete:hover {
-  background-color: #43a047;
+  background-color: #8a1c99;
 }
 
 /* No Show - Red */
