@@ -1,5 +1,56 @@
 {% load i18n %}
+<style>
+  /* ===== Wizard Action Buttons (Design Only) ===== */
 
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+/* Primary button (Login) */
+.btn-primary {
+    background: rgb(131, 29, 156);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(131, 29, 156, 0.35);
+}
+
+.btn-primary:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(131, 29, 156, 0.45);
+}
+
+/* Secondary button (Back) */
+.btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+
+/* Button spacing */
+.btn + .btn {
+    margin-left: 12px;
+}
+
+/* Focus state */
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(131, 29, 156, 0.25);
+}
+
+</style>
 {% if cancel_url %}
 {% endif %}
 {% if wizard.steps.prev %}
@@ -7,4 +58,4 @@
           value="{{ wizard.steps.prev }}"
           class="btn btn-secondary">{% trans "Back" %}</button>
 {% endif %}
-<button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+<button type="submit" class="btn btn-primary">{% trans "Next" %}</button>

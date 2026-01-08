@@ -129,6 +129,76 @@
     background: #d1fae5;
     color: #065f46;
 }
+/* ===== Wizard Form Fields – Clean Dashboard Style ===== */
+
+/* Field wrapper spacing */
+.mb-3 {
+    margin-bottom: 20px;
+}
+
+/* Labels */
+.form-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1a355c;
+    margin-bottom: 6px;
+}
+
+/* Inputs / selects / textareas */
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 1rem;
+    color: #1f2937;
+    background: #f9fafb;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+/* Focus state */
+.form-control:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: rgb(131, 29, 156);
+    box-shadow: 0 0 0 3px rgba(131, 29, 156, 0.18);
+}
+
+/* Placeholder */
+.form-control::placeholder {
+    color: #9ca3af;
+    font-size: 0.95rem;
+}
+
+/* Help text */
+.form-text {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* Error message */
+.text-danger {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #dc2626;
+}
+
+/* Invalid input state */
+.form-control.is-invalid,
+.form-control:has(+ .text-danger) {
+    border-color: #dc2626;
+    background: #fef2f2;
+}
+
+/* Mobile optimization */
+@media (max-width: 600px) {
+    .form-control {
+        font-size: 0.95rem;
+        padding: 9px 12px;
+    }
+}
 
 </style>
 <div class="security-wrapper">

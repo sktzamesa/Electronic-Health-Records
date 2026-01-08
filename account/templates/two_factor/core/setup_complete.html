@@ -2,6 +2,97 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+  /* ===== 2FA Success Page – Clean Dashboard Style ===== */
+
+/* Title */
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: rgb(131, 29, 156);
+    margin-bottom: 16px;
+    margin-right: 35px;
+}
+
+/* Main message */
+h1 + p {
+    font-size: 1.05rem;
+    color: #374151;
+    margin-bottom: 28px;
+}
+
+/* Buttons (reuse dashboard buttons) */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+/* Secondary button */
+.btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+
+/* Success button */
+.btn-success {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.btn-success:hover {
+    background: #15803d;
+}
+
+/* Link-style button */
+.btn-link {
+    background: none;
+    color: rgb(131, 29, 156);
+    padding: 0;
+    font-weight: 600;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+/* Full-width button */
+.btn-block {
+    width: auto;
+    margin-top: 12px;
+}
+
+/* Float-right fix */
+.float-right {
+    float: right;
+    margin-top: 8px;
+}
+
+/* Clear floats */
+.float-right + p::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+/* Paragraph spacing */
+p {
+    margin-bottom: 18px;
+}
+
+</style>
   <h1>{% block title %}{% trans "Enable Two-Factor Authentication" %}{% endblock %}</h1>
 
   <p>{% blocktrans trimmed %}Congratulations, you've successfully enabled two-factor
@@ -20,5 +111,4 @@
     <p><a href="{% url 'two_factor:phone_create' %}"
         class="btn btn-success">{% trans "Add Phone Number" %}</a></p>
   {% endif %}
-
 {% endblock %}

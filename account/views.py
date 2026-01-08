@@ -27,7 +27,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from two_factor.views import LoginView
 from django.contrib.auth.decorators import permission_required
 import re
-
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 
 summarizer = pipeline(
     "text2text-generation",
@@ -117,6 +118,8 @@ class CustomLoginView(LoginView):
         user = self.request.user
         if user.is_staff:
             return '/clinic-admin/'
+        elif user.superuser:
+            return '/admin/'
         elif user.groups.filter(name='manager').exists():
             return '/manager/'
         return '/dashboard/'
@@ -408,7 +411,6 @@ def update_appointment_status(request, appointment_id):
         valid_transitions = ["confirm", "completed", "no-show"]
 
         if new_status in valid_transitions and new_status != appointment.status:
-            # Log the change for audit/history
             AppointmentStatusLog.objects.create(
                 appointment=appointment,
                 old_status=appointment.status,
@@ -416,41 +418,45 @@ def update_appointment_status(request, appointment_id):
                 changed_by=request.user
             )
 
-            # Apply the new status
             appointment.status = new_status
             appointment.save()
 
-            # Get users
             patient_user = appointment.patient.profile.user
             doctor_user = appointment.doctor.profile.user
 
-            patient_email = patient_user.email
-            patient_name = patient_user.get_full_name() or patient_user.username
-            doctor_name = doctor_user.get_full_name() or doctor_user.username
-
-            appointment_date = appointment.appointment_date
-            appointment_time = appointment.appointment_time.strftime('%I:%M %p')
+            context = {
+                "patient_name": patient_user.get_full_name() or patient_user.username,
+                "doctor_name": doctor_user.get_full_name() or doctor_user.username,
+                "appointment_date": appointment.appointment_date,
+                "appointment_time": appointment.appointment_time.strftime('%I:%M %p'),
+            }
 
             if new_status == "confirm":
                 subject = "Your Appointment Has Been Confirmed"
-                message = (
-                    f"Dear {patient_name},\n\n"
-                    f"Your appointment with Dr. {doctor_name} on {appointment_date} at {appointment_time} "
-                    f"has been confirmed.\n\nThank you!"
-                )
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [patient_email])
+                template = "emails/appointment_confirmed.html"
 
             elif new_status == "completed":
                 subject = "Your Appointment Has Been Completed"
-                message = (
-                    f"Dear {patient_name},\n\n"
-                    f"Your appointment with Dr. {doctor_name} on {appointment_date} at {appointment_time} "
-                    f"has been marked as completed.\n\nThank you!"
+                template = "emails/appointment_completed.html"
+
+            else:
+                template = None
+
+            if template:
+                html_message = render_to_string(template, context)
+
+                email = EmailMessage(
+                    subject=subject,
+                    body=html_message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    to=[patient_user.email],
                 )
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [patient_email])
+                email.content_subtype = "html"  # IMPORTANT
+                email.send()
 
         return redirect("appointment_status", status=next_page)
 
     return redirect("appointment_status", status="confirm")
+
 
 

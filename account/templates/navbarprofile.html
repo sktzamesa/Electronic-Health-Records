@@ -18,9 +18,6 @@
         {% else %}
             <img id="navbarAvatar" src="{% static 'img/default.png' %}" alt="Default Avatar">
         {% endif %}
-
-        <span>Hi, {{ username }}!</span>
-
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit" class="logout-btn">Logout</button>
