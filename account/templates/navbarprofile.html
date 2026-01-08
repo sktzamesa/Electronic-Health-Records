@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<header class="dashboard-header">
+    <div class="dashboard-user">
+
+        {% if Profile and Profile.image %}
+            <img id="navbarAvatar" src="{{ Profile.image.url }}" alt="User Avatar">
+        {% else %}
+            <img id="navbarAvatar" src="{% static 'img/default.png' %}" alt="Default Avatar">
+        {% endif %}
+
+        <span>Hi, {{ username }}!</span>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+
+    </div>
+</header>
+
+</body>
+</html>

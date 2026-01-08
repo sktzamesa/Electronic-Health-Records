@@ -2,9 +2,9 @@ body {
     background: #f6f8fb;
     margin: 0;
     font-family: 'Segoe UI', Arial, sans-serif;
-    display: flex;
     min-height: 100vh;
 }
+
 .sidebar {
     position: fixed;
     top: 0;
