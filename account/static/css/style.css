@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgb(0, 161, 93);
+    background: rgb(184, 36, 164);
     color: #fff;
     padding: 1rem 2rem;
     box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
@@ -937,7 +937,7 @@
 }
 
 .register-links a {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     text-decoration: underline;
     margin: 0 0.5em;
     transition: color 0.2s;

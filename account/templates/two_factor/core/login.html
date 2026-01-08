@@ -1,3 +1,4 @@
+{% extends "navbar.html" %}
 {% load static %}
 {% load i18n %}
 {% load two_factor_tags %}
@@ -9,8 +10,8 @@
 <style>
 /* ===================== ROOT ===================== */
 :root {
-  --primary: #7c3aed;
-  --primary-dark: #6d28d9;
+  --primary: rgb(184, 36, 164);
+  --primary-dark: rgb(184, 36, 164);
   --primary-soft: rgba(124, 58, 237, 0.18);
   --bg: #f5f7fb;
   --card: #ffffff;
@@ -30,62 +31,6 @@ html, body {
   background: var(--bg);
   color: #0f1724;
 }
-
-/* ===================== NAVBAR ===================== */
-.navbar {
-  background: var(--primary);
-  padding: 14px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 64px; /* FIXED HEIGHT */
-}
-
-.navbar-logo .ehr-logo {
-  background: #ffffff;
-  color: var(--primary);
-  font-weight: 700;
-  padding: 8px 14px;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.25);
-}
-
-.navbar-links {
-  list-style: none;
-  display: flex;
-  gap: 22px;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar-links a {
-  color: #ffffff;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.navbar-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.login-btn {
-  border: 1px solid #ffffff;
-  color: #ffffff;
-  padding: 8px 14px;
-  border-radius: 8px;
-  text-decoration: none;
-}
-
-.signup-btn {
-  background: #ffffff;
-  color: var(--primary);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
 /* ===================== AUTH LAYOUT ===================== */
 .auth-wrapper {
   min-height: calc(100vh - 64px); /* MATCH NAVBAR HEIGHT */
@@ -259,29 +204,6 @@ html, body {
   }
 }
 </style>
-
-
-
-<!-- ===================== NAVBAR ===================== -->
-<nav class="navbar">
-  <div class="navbar-logo">
-    <span class="ehr-logo">PrimeHealth General Hospital</span>
-  </div>
-
-  <ul class="navbar-links">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="#about">About Us</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact Us</a></li>
-  </ul>
-
-  <div class="navbar-actions">
-    <a href="{% url 'two_factor:login' %}" class="login-btn">Login</a>
-    <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
-  </div>
-</nav>
-
-<!-- ===================== LOGIN CARD ===================== -->
 <div class="auth-wrapper">
   <div class="auth-card">
 
@@ -297,7 +219,6 @@ html, body {
       <div class="form-wrap">
         <h2>{% trans "Login" %}</h2>
         <p>{% trans "Please login to your account." %}</p>
-        <br></br>
         <form method="post" novalidate>
           {% csrf_token %}
           {% include "two_factor/_wizard_forms.html" %}
@@ -306,7 +227,7 @@ html, body {
             {% trans "Login" %}
           </button>
         </form>
-
+        <br></br>
         <p class="helper">
           Don’t have an account yet?
           <a href="{% url 'register' %}">Register here</a>

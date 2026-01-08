@@ -31,7 +31,7 @@ body {
     padding: 1.2rem 1rem 1.2rem 1.2rem;
 }
 .ehr-logo {
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     color: #fff;
     padding: 0.2em 0.6em;
     border-radius: 6px;
@@ -70,7 +70,7 @@ body {
 .sidebar-link.active,
 .sidebar-link:hover {
     background: rgba(0,161,93,0.08);
-    color: rgb(0,161,93);
+    color: rgb(131, 29, 156);
 }
 
 /* Make active/hover span full width when collapsed */
@@ -125,7 +125,7 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     height: 64px;
     padding: 0 2rem;
     box-shadow: 0 2px 12px rgba(26, 53, 92, 0.06);
@@ -140,7 +140,7 @@ body {
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgb(0, 161, 93);
+    border: 2px solid rgb(131, 29, 156);
 }
 .dashboard-user span {
     font-weight: 500;

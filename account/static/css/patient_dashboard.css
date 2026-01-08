@@ -31,7 +31,7 @@ body {
     padding: 1.2rem 1rem 1.2rem 1.2rem;
 }
 .ehr-logo {
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     color: #fff;
     padding: 0.2em 0.6em;
     border-radius: 6px;
@@ -69,7 +69,7 @@ body {
 .sidebar-link.active,
 .sidebar-link:hover {
     background: rgba(0,161,93,0.08);
-    color: rgb(0,161,93);
+    color: rgb(131, 29, 156);
 }
 
 /* Make active/hover span full width when collapsed */
@@ -124,7 +124,7 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background: rgb(0, 161, 93);
+    background: rgb(131, 29, 156);
     height: 64px;
     padding: 0 2rem;
     box-shadow: 0 2px 12px rgba(26, 53, 92, 0.06);
@@ -139,7 +139,7 @@ body {
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgb(0, 161, 93);
+    border: 2px solid rgb(131, 29, 156);
 }
 .dashboard-user span {
     font-weight: 500;
@@ -177,7 +177,7 @@ body {
     margin-bottom: 2rem;
 }
 .dashboard-welcome h2 {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     margin-bottom: 0.5rem;
     font-size: 2rem;
     font-weight: 700;
@@ -210,7 +210,7 @@ body {
 .dashboard-card .card-icon {
     font-size: 2rem;
     margin-bottom: 0.7rem;
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
 }
 .dashboard-card h3 {
     margin: 0 0 0.5rem 0;
@@ -316,7 +316,7 @@ body {
 }
 
 .doctor-status-container h3 {
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
     margin: 0 0 1rem 0;
     font-size: 1.3rem;
     font-weight: 700;
@@ -342,13 +342,13 @@ body {
     height: 64px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgb(0, 161, 93);
+    border: 2px solid rgb(131, 29, 156);
 }
 
 .doctor-name {
     font-weight: 600;
     font-size: 1.1rem;
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
 }
 
 .doctor-specialty {
@@ -390,7 +390,7 @@ body {
 }
 .logout-btn:hover {
     background: rgb(255, 255, 255);
-    color: rgb(0, 161, 93);
+    color: rgb(131, 29, 156);
 }
 .doctor-list {
     display: flex;
@@ -518,7 +518,7 @@ body {
     height: 140px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #10b981;
+    border: 3px solid rgb(131, 29, 156);
     box-shadow: 0 2px 8px rgba(16,185,129,0.08);
     background: #fff;
 }
@@ -528,7 +528,7 @@ body {
     bottom: 10px;
     right: -15px;
     background: #fff;
-    border: 2px solid #10b981;
+    border: 2px solid rgb(131, 29, 156);
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     padding: 8px;
@@ -547,7 +547,7 @@ body {
     top: 110px;
     right: 0;
     background: #fff;
-    border: 1.5px solid #10b981;
+    border: 1.5px solid rgb(131, 29, 156);
     border-radius: 12px;
     box-shadow: 0 4px 24px rgba(16,185,129,0.10);
     min-width: 200px;
@@ -559,7 +559,7 @@ body {
     display: block;
     padding: 18px 24px;
     cursor: pointer;
-    color: #10b981;
+    color: rgb(131, 29, 156);
     font-weight: 600;
     font-size: 1.08rem;
     text-align: center;
@@ -600,7 +600,7 @@ body {
 }
 
 .profile-section h3 {
-    color: #10b981;
+    color: rgb(131, 29, 156);
     font-size: 1.15rem;
     margin-bottom: 10px;
     margin-top: 0;
@@ -624,7 +624,7 @@ body {
 }
 
 .profile-action-btn {
-    background: #10b981;
+    background: rgb(131, 29, 156);
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -666,7 +666,7 @@ body {
 
 .quick-links h4, .recent-activity h4 {
     margin-top: 0;
-    color: #10b981;
+    color: rgb(131, 29, 156);
     font-size: 1.08rem;
     margin-bottom: 10px;
 }
@@ -683,7 +683,7 @@ body {
 }
 
 .quick-links a {
-    color: #10b981;
+    color: rgb(131, 29, 156);
     text-decoration: none;
     transition: text-decoration 0.2s;
 }
@@ -715,7 +715,7 @@ body {
 
 .modal-content h3 {
     margin-top: 0;
-    color: #10b981;
+    color: rgb(131, 29, 156);
     margin-bottom: 18px;
 }
 
@@ -737,7 +737,7 @@ body {
 .modal-content input[type="text"]:focus,
 .modal-content input[type="password"]:focus,
 .modal-content input[type="email"]:focus {
-    border: 1.5px solid #10b981;
+    border: 1.5px solid rgb(131, 29, 156);
     background: #fff;
 }
 
@@ -803,7 +803,7 @@ body {
 }
 
 .appointment-records-header h2 {
-    color: #10b981;
+    color: rgb(131, 29, 156);
     font-size: 2rem;
     font-weight: 700;
     margin: 0;
@@ -826,7 +826,7 @@ body {
     transition: background 0.2s, color 0.2s;
 }
 .tab-btn.active {
-    background: #10b981;
+    background: rgb(131, 29, 156);
     color: #fff;
 }
 
@@ -858,7 +858,7 @@ body {
 .appointment-info .date,
 .appointment-info .time {
     font-weight: 600;
-    color: #10b981;
+    color: rgb(131, 29, 156);
 }
 
 .status {
@@ -900,7 +900,7 @@ body {
     display: block;
     font-size: 2.2rem;
     font-weight: 700;
-    color: #10b981;
+    color: rgb(131, 29, 156);
     margin-left: 8px;
     margin-bottom: 1.2rem;
     letter-spacing: 1px;
@@ -971,7 +971,7 @@ body {
     top: 1.2rem;
     right: 1.5rem;
     font-size: 2.2rem;
-    color: #10b981;
+    color: rgb(131, 29, 156);
     cursor: pointer;
     font-weight: bold;
     transition: color 0.2s;
@@ -982,7 +982,7 @@ body {
 
 .modal-content h3 {
     margin-top: 0;
-    color: #10b981;
+    color: rgb(131, 29, 156);
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
@@ -1002,7 +1002,7 @@ body {
 }
 
 #modalDetails p strong {
-    color: #10b981;
+    color: rgb(131, 29, 156);
     font-weight: 700;
     font-size: 1.15em;
     letter-spacing: 0.5px;
@@ -1032,7 +1032,7 @@ body {
     align-items: center;
     font-weight: 500;
     box-shadow: 0 2px 8px rgba(16,185,129,0.06);
-    border-left: 5px solid #10b981;
+    border-left: 5px solid rgb(131, 29, 156);
     border-right: 5px solid #e0f7f4;
     letter-spacing: 0.5px;
     position: relative;
@@ -1057,7 +1057,7 @@ body {
 }
 
 .billing-list-total {
-    background: linear-gradient(90deg, #10b981 80%, #059669 100%);
+    background: linear-gradient(90deg, rgb(131, 29, 156) 80%, #059669 100%);
     color: #fff !important;
     font-weight: 800;
     font-size: 1.22rem;
@@ -1127,7 +1127,7 @@ body {
 
 /* Form Heading */
 .appointment-form-container h2 {
-    color: #10b981;
+    color: rgb(131, 29, 156);
     margin-bottom: 1.5rem;
     font-size: 2rem;
     font-weight: 700;
@@ -1181,7 +1181,7 @@ label {
 }
 
 .form-control:focus {
-    border-color: #10b981;
+    border-color: rgb(131, 29, 156);
     background: #fff;
     outline: none;
 }
@@ -1202,7 +1202,7 @@ label {
 
 /* Submit Button */
 .book-appointment-btn {
-    background: #10b981;
+    background: rgb(131, 29, 156);
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -1236,7 +1236,7 @@ label {
 }
 
 .appointment-calendar-container h2 {
-    color: #10b981;
+    color: rgb(131, 29, 156);
     margin-bottom: 1.5rem;
     font-size: 2rem;
     font-weight: 700;

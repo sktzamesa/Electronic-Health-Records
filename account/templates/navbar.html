@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LE Dental Clinic</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span class="ehr-logo">PrimeHealth General Hospital</span>
+        </div>
+        <ul class="navbar-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'home' %}">About Us</a></li>
+            <li><a href="{% url 'home' %}">Services</a></li>
+            <li><a href="{% url 'home' %}">Contact Us</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a href="{% url 'two_factor:login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
+        </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+    </body>
+    </html>

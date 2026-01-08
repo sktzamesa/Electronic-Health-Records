@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <!-- ===== Navbar ===== -->
+    {% block navbar %}
     <nav class="navbar">
         <div class="navbar-logo">
             <span class="ehr-logo">PrimeHealth General Hospital</span>
@@ -24,7 +24,7 @@
             <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
         </div>
     </nav>
-
+    {% endblock %}
     <!-- ===== Home Section ===== -->
    <section class="home" id="home">
     <div class="home_content">

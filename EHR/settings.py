@@ -86,6 +86,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+LOGIN_REDIRECT_URL = 'two_factor:profile'
+LOGIN_URL = 'two_factor:login'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 LOGOUT_REDIRECT_URL = 'two_factor:login'

@@ -166,7 +166,7 @@ class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
 
 
 
-
+@permission_required('account.view_record', raise_exception=True)
 def view_medical_report(request, report_id):
     report = get_object_or_404(MedicalReport, id=report_id)
 
