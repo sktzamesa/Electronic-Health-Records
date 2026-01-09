@@ -7,6 +7,19 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/patient_dashboard.css' %}">
   {% block extra_media %}{% endblock %}
+  <aside class="sidebar collapsed" id="sidebar">
+        <div class="sidebar-header">
+            <span class="ehr-logo">Hospital Management System</span>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span id="sidebarToggleIcon">&#9776;</span>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link"><span>🏠</span> <span class="sidebar-text">Dashboard</span></a>
+            <a href="{% url 'appointment' %}" class="sidebar-link"><span>📅</span> <span class="sidebar-text">Appointment Records</span></a>
+            <a href="{% url 'profile' %}" class="sidebar-link"><span>👤</span> <span class="sidebar-text">Profile</span></a>
+        </nav>
+    </aside>
 
 </head>
 <body>
@@ -43,8 +56,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-</script>
 
+</script>
+<script src="{% static 'js/script1.js' %}"></script>
 
 </body>
 </html>

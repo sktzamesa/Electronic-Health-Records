@@ -2,27 +2,138 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+  .backup-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 12px 28px rgba(184, 36, 164, 0.15);
+    border-top: 6px solid rgb(184, 36, 164);
+  }
+
+  .backup-container h1 {
+    color: rgb(184, 36, 164);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .backup-container p {
+    color: #4b5563;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .token-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .token-list li {
+    background: rgba(184, 36, 164, 0.08);
+    border: 1px dashed rgb(184, 36, 164);
+    color: rgb(184, 36, 164);
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .token-note {
+    font-size: 0.95rem;
+    color: #374151;
+    margin-bottom: 22px;
+  }
+
+  .backup-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 26px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .btn-primary {
+    background-color: rgb(184, 36, 164);
+    border: none;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(150, 28, 134);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(184, 36, 164, 0.35);
+  }
+
+  .btn-link {
+    color: rgb(184, 36, 164);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+
+  .empty-tokens {
+    background: rgba(184, 36, 164, 0.05);
+    padding: 16px;
+    border-radius: 10px;
+    border-left: 4px solid rgb(184, 36, 164);
+    color: #374151;
+  }
+</style>
+
+<div class="backup-container">
   <h1>{% block title %}{% trans "Backup Tokens" %}{% endblock %}</h1>
-  <p>{% blocktrans trimmed %}Backup tokens can be used when your primary and backup
-      phone numbers aren't available. The backup tokens below can be used
-      for login verification. If you've used up all your backup tokens, you
-      can generate a new set of backup tokens. Only the backup tokens shown
-      below will be valid.{% endblocktrans %}</p>
+
+  <p>
+    {% blocktrans trimmed %}
+      Backup tokens can be used when your primary and backup phone numbers
+      aren't available. Each token can be used once for login verification.
+      Keep them secure.
+    {% endblocktrans %}
+  </p>
 
   {% if device.token_set.count %}
-    <ul>
+    <ul class="token-list">
       {% for token in device.token_set.all %}
         <li>{{ token.token }}</li>
       {% endfor %}
     </ul>
-    <p>{% blocktrans %}Print these tokens and keep them somewhere safe.{% endblocktrans %}</p>
+
+    <p class="token-note">
+      {% blocktrans %}Print these tokens or store them in a secure location.{% endblocktrans %}
+    </p>
   {% else %}
-    <p>{% trans "You don't have any backup codes yet." %}</p>
+    <div class="empty-tokens">
+      {% trans "You don't have any backup codes yet." %}
+    </div>
   {% endif %}
 
-  <form method="post">{% csrf_token %}{{ form.as_p }}
-    <a href="{% url 'two_factor:profile'%}"
-       class="float-right btn btn-link">{% trans "Back to Account Security" %}</a>
-    <button class="btn btn-primary" type="submit">{% trans "Generate Tokens" %}</button>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="backup-actions">
+      <a href="{% url 'two_factor:profile' %}" class="btn-link">
+        {% trans "Back to Account Security" %}
+      </a>
+
+      <button class="btn btn-primary" type="submit">
+        {% trans "Generate Tokens" %}
+      </button>
+    </div>
   </form>
+</div>
 {% endblock %}

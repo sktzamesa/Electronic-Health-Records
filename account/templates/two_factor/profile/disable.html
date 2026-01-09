@@ -2,59 +2,133 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+  .disable-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 12px 28px rgba(184, 36, 164, 0.15);
+    border-top: 6px solid rgb(184, 36, 164);
+  }
 
-<h1 style="
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #b91c1c;
-    margin-top: 14px;
-    margin-left: 10px;
-">
-  {% block title %}{% trans "Disable Two-factor Authentication" %}{% endblock %}
-</h1>
+  .disable-container h1 {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: rgb(184, 36, 164);
+    margin-bottom: 12px;
+  }
 
-<p style="
-    font-size: 1.05rem;
+  .disable-warning {
+    background: rgba(184, 36, 164, 0.06);
+    border-left: 5px solid rgb(184, 36, 164);
+    padding: 16px 18px;
+    border-radius: 10px;
     color: #374151;
-    margin-bottom: 28px;
-    max-width: 640px;
-">
-  {% blocktrans trimmed %}
-    You are about to disable two-factor authentication. This weakens your account
-    security, are you sure?
-  {% endblocktrans %}
-</p>
+    margin-bottom: 26px;
+    line-height: 1.6;
+    font-size: 1.05rem;
+  }
 
-<form method="post" style="
-    background: #fef2f2;
-    border: 1.5px solid #fecaca;
+  .disable-form {
+    background: #faf5ff;
+    border: 1.5px solid rgba(184, 36, 164, 0.35);
     border-radius: 14px;
     padding: 24px 28px;
-    max-width: 640px;
-">
-  {% csrf_token %}
+  }
 
-  <table style="
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-  ">
-    {{ form.as_table }}
-  </table>
+  .disable-form table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 22px;
+  }
 
-  <button type="submit" class="btn btn-danger" style="
-      background: #dc2626;
-      color: #ffffff;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-bottom: 50px;
-  ">
-    {% trans "Disable" %}
-  </button>
-</form>
+  .disable-form td,
+  .disable-form th {
+    padding: 10px 6px;
+    font-size: 0.95rem;
+  }
 
+  .danger-note {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-bottom: 18px;
+  }
+
+  .disable-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-cancel {
+    background: transparent;
+    color: rgb(184, 36, 164);
+    border: 2px solid rgb(184, 36, 164);
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-cancel:hover {
+    background: rgb(184, 36, 164);
+    color: #ffffff;
+  }
+
+  .btn-danger {
+    background: rgb(184, 36, 164);
+    color: #ffffff;
+    border: none;
+    padding: 10px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-danger:hover {
+    background: rgb(150, 28, 134);
+    box-shadow: 0 6px 16px rgba(184, 36, 164, 0.35);
+    transform: translateY(-1px);
+  }
+</style>
+
+<div class="disable-container">
+  <h1>{% block title %}{% trans "Disable Two-Factor Authentication" %}{% endblock %}</h1>
+
+  <div class="disable-warning">
+    {% blocktrans trimmed %}
+      You are about to disable two-factor authentication.
+      This will significantly reduce the security of your account.
+      Are you sure you want to continue?
+    {% endblocktrans %}
+  </div>
+
+  <form method="post" class="disable-form">
+    {% csrf_token %}
+
+    <table>
+      {{ form.as_table }}
+    </table>
+
+    <p class="danger-note">
+      Disabling 2FA removes an important layer of protection from your account.
+    </p>
+
+    <div class="disable-actions">
+      <a href="{% url 'two_factor:profile' %}" class="btn-cancel">
+        {% trans "Cancel" %}
+      </a>
+
+      <button type="submit" class="btn-danger">
+        {% trans "Disable Two-Factor Authentication" %}
+      </button>
+    </div>
+  </form>
+</div>
 {% endblock %}

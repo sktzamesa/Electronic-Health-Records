@@ -26,8 +26,5 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
 class adminprofile(ModelAdmin):
     pass
 
-@admin.register(MedicalReport)
-class MedicalReport(ModelAdmin):
-    list_display = ['patient_name']
 
     
