@@ -29,6 +29,7 @@ from django.contrib.auth.decorators import permission_required
 import re
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from django.http import HttpResponseForbidden
 
 summarizer = pipeline(
     "text2text-generation",
@@ -36,28 +37,17 @@ summarizer = pipeline(
     device_map="auto"
 )
 
-@permission_required('account.view_medicalreport', raise_exception=True)
+
 @login_required
 def ai_page(request):
     user = request.user
-    return render(request, "ai.html",
-                  {
-                      'username': user.username,
-                  })
 
-def clean_medical_text(text: str) -> str:
-    import re
+    if not (user.is_active and user.is_staff):
+        return HttpResponseForbidden("Staff access only")
 
-    text = re.sub(r"\s+([.,!?;:])", r"\1", text)
-
-    text = re.sub(r"([.,!?;:])([A-Za-z])", r"\1 \2", text)
-
-    text = re.sub(r",\s*or\s+", ", or ", text)
-
-    sentences = re.split(r'(?<=[.!?])\s+', text)
-    sentences = [s.capitalize() for s in sentences if s]
-
-    return " ".join(sentences)
+    return render(request, "ai.html", {
+        "username": user.username
+    })
 
 
 def summarize_medical_text(text):
@@ -116,12 +106,11 @@ def summarize_report(request):
 class CustomLoginView(LoginView):
     def get_success_url(self):
         user = self.request.user
-        if user.is_staff:
-            return '/clinic-admin/'
-        elif user.superuser:
+        if user.is_superuser and user.is_staff:
             return '/admin/'
-        elif user.groups.filter(name='manager').exists():
-            return '/manager/'
+        elif user.is_staff:
+            return '/clinic-admin/'
+        
         return '/dashboard/'
 
 
@@ -139,8 +128,11 @@ class clinicadmin(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'clinic_admin.html'
     context_object_name = 'appointment'
     permission_required = 'account.view_appointment'
+
+    def has_permission(self):
+        user = self.request.user
+        return user.is_staff 
     
-        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = now().date()
@@ -164,6 +156,10 @@ class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
     context_object_name = 'medical_reports'
     permission_required = 'account.view_medicalreport'
 
+    def has_permission(self):
+        user = self.request.user
+        return user.is_staff 
+
     def get_queryset(self):
         return MedicalReport.objects.all().order_by('-created_at')
 
@@ -172,6 +168,7 @@ class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
 @permission_required('account.view_record', raise_exception=True)
 def view_medical_report(request, report_id):
     report = get_object_or_404(MedicalReport, id=report_id)
+    
 
     if request.method == "POST":
         report.patient_name = request.POST.get("patient_name")
