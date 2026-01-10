@@ -165,10 +165,14 @@ class MedicalReportListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
 
 
 
-@permission_required('account.view_record', raise_exception=True)
+@login_required
 def view_medical_report(request, report_id):
+    user = request.user
+
+    if not user.is_staff:
+        return HttpResponseForbidden("Staff access only")
+
     report = get_object_or_404(MedicalReport, id=report_id)
-    
 
     if request.method == "POST":
         report.patient_name = request.POST.get("patient_name")
